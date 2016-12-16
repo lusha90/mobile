@@ -21,23 +21,23 @@
   #set ($id = 0)
   #if ($failedConfigurations.size() > 0)
   <table class="resultsTable configTable">
-      <tr><th colspan="6" class="header failedConfig">$messages.getString("failedConfiguration")</th></tr>
+      <tr><th colspan="5" class="header failedConfig">$messages.getString("failedConfiguration")</th></tr>
     #set ($id = 0)
     #foreach ($testClass in $failedConfigurations.keySet())
         <tr class="group">
-            <td colspan="6">$testClass.name</td>
+            <td colspan="5">$testClass.name</td>
         </tr>
       #set ($classResults = $failedConfigurations.get($testClass))
       #parse("org/uncommons/reportng/templates/html/class-results.html.vm")
     #end
 
     #if ($skippedConfigurations.size() > 0)
-        <tr><td colspan="6">&nbsp;</td></tr>
-        <tr><td colspan="6" class="header skippedConfig">$messages.getString("skippedConfiguration")</td></tr>
+        <tr><td colspan="5">&nbsp;</td></tr>
+        <tr><td colspan="5" class="header skippedConfig">$messages.getString("skippedConfiguration")</td></tr>
       #set ($id = 0)
       #foreach ($testClass in $skippedConfigurations.keySet())
           <tr>
-              <td colspan="6" class="group">$testClass.name</td>
+              <td colspan="5" class="group">$testClass.name</td>
           </tr>
         #set ($classResults = $skippedConfigurations.get($testClass))
         #parse ("org/uncommons/reportng/templates/html/class-results.html.vm")
@@ -49,25 +49,16 @@
 
   #if ($failedTests.size() > 0)
   <table class="resultsTable">
-      <tr><th colspan="6" class="header failed">$messages.getString("failedTests")</th></tr>
+      <tr><th colspan="5" class="header failed">$messages.getString("failedTests")</th></tr>
       <tr>
           <td colspan="1" class="group">方法名称</td>
           <td colspan="1" class="group">测试描述</td>
           <td colspan="1" class="group">执行时间</td>
-          <td colspan="1" class="group">测试数据</td>
           <td colspan="1" class="group">测试结果</td>
           <td colspan="1" class="group">屏幕截图</td>
       </tr>
     #foreach ($testClass in $failedTests.keySet())
-        <tr><th colspan="6" class="group" align="left">$testClass.name</th></tr>
-        <tr>
-            <td colspan="1" class="group">test</td>
-            <td colspan="1" class="group">$messages.getString("case.description")</td>
-            <td colspan="1" class="group">$utils.formatDuration($testResult.startMillis, $testResult.endMillis)s</td>
-            <td colspan="1" class="group">$messages.getString("case.testdata")</td>
-            <td colspan="1" class="group">$messages.getString("case.testresult")</td>
-            <td colspan="1" class="group">$messages.getString("case.screenshot")</td>
-        </tr>
+        <tr><th colspan="5" class="group" align="left">$testClass.name</th></tr>
       #set ($classResults = $failedTests.get($testClass))
       #parse ("org/uncommons/reportng/templates/html/class-results.html.vm")
     #end
@@ -76,25 +67,16 @@
 
   #if ($skippedTests.size() > 0)
   <table class="resultsTable" width="100%">
-      <tr><th colspan="6" class="header skipped">$messages.getString("skippedTests")</th></tr>
+      <tr><th colspan="5" class="header skipped">$messages.getString("skippedTests")</th></tr>
       <tr>
           <td colspan="1" class="group">方法名称</td>
           <td colspan="1" class="group">测试描述</td>
           <td colspan="1" class="group">执行时间</td>
-          <td colspan="1" class="group">测试数据</td>
           <td colspan="1" class="group">测试结果</td>
           <td colspan="1" class="group">屏幕截图</td>
       </tr>
     #foreach ($testClass in $skippedTests.keySet())
-        <tr><th colspan="6" class="group" align="left">$testClass.name</th></tr>
-        <tr>
-            <td colspan="1" class="group">test</td>
-            <td colspan="1" class="group">$messages.getString("case.description")</td>
-            <td colspan="1" class="group">$utils.formatDuration($testResult.startMillis, $testResult.endMillis)s</td>
-            <td colspan="1" class="group">$messages.getString("case.testdata")</td>
-            <td colspan="1" class="group">$messages.getString("case.testresult")</td>
-            <td colspan="1" class="group">$messages.getString("case.screenshot")</td>
-        </tr>
+        <tr><th colspan="5" class="group" align="left">$testClass.name</th></tr>
       #set ($classResults = $skippedTests.get($testClass))
       #parse ("org/uncommons/reportng/templates/html/class-results.html.vm")
     #end
@@ -103,25 +85,16 @@
 
   #if ($passedTests.size() > 0)
   <table class="resultsTable">
-      <tr><th colspan="6" class="header passed">$messages.getString("passedTests")</th></tr>
+      <tr><th colspan="5" class="header passed">$messages.getString("passedTests")</th></tr>
       <tr>
           <td colspan="1" class="group">方法名称</td>
           <td colspan="1" class="group">测试描述</td>
           <td colspan="1" class="group">执行时间</td>
-          <td colspan="1" class="group">测试数据</td>
           <td colspan="1" class="group">测试结果</td>
           <td colspan="1" class="group">屏幕截图</td>
       </tr>
     #foreach ($testClass in $passedTests.keySet())
-        <tr><th colspan="6" class="group" align="left">$testClass.name</th></tr>
-        <tr>
-            <td colspan="1" class="group">test</td>
-            <td colspan="1" class="group">$messages.getString("case.description")</td>
-            <td colspan="1" class="group">$utils.formatDuration($testResult.startMillis, $testResult.endMillis)s</td>
-            <td colspan="1" class="group">$messages.getString("case.testdata")</td>
-            <td colspan="1" class="group">$messages.getString("case.testresult")</td>
-            <td colspan="1" class="group">$messages.getString("case.screenshot")</td>
-        </tr>
+        <tr><th colspan="5" class="group" align="left">$testClass.name</th></tr>
       #set ($classResults = $passedTests.get($testClass))
       #parse ("org/uncommons/reportng/templates/html/class-results.html.vm")
     #end
