@@ -34,7 +34,7 @@
     #if ($skippedConfigurations.size() > 0)
         <tr><td colspan="5">&nbsp;</td></tr>
         <tr><td colspan="5" class="header skippedConfig">$messages.getString("skippedConfiguration")</td></tr>
-      #set ($id = 0)
+##      #set ($id = 0)
       #foreach ($testClass in $skippedConfigurations.keySet())
           <tr>
               <td colspan="5" class="group">$testClass.name</td>

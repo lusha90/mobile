@@ -82,9 +82,18 @@
             </div>
         #end
         #set ($id = $id + 1)
+
+        #if ( $testResult.status == 1)
+            pass
+        #end
+
+        #if ( $testResult.status == 3)
+            skip
+        #end
+
     </td>
     <td class="screenshot">
-       NA
+        NA
     </td>
 </tr>
 #end

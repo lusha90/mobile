@@ -3,8 +3,6 @@ package gw.com.cn;
 import gw.com.cn.util.FtpUtil;
 import gw.com.cn.util.JsonUtil;
 import gw.com.cn.util.LogUtil;
-import org.apache.commons.net.ftp.FTPClient;
-import org.apache.commons.net.ftp.FTPFile;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.testng.TestNG;
@@ -74,7 +72,13 @@ public class DZHRunner {
         }
         BaseAction.dzhInfo = dzhInfo;
         LogUtil.getLogger().info("################################# start of the test #################################");
-        TestNG testng = TestNG.privateMain(new String[]{testngXmlPath}, null);
+        TestNG testng = new TestNG();
+        testng.setUseDefaultListeners(false);
+        List<String> suites = new ArrayList<String>();
+        suites.add(testngXmlPath);
+        testng.setTestSuites(suites);
+        testng.setOutputDirectory(new File(".").getAbsolutePath() + File.separator + "dzhReport");
+        testng.run();
         LogUtil.getLogger().info("#################################  end of the test  #################################\n");
         System.exit(testng.getStatus());
     }
