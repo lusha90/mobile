@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="dzhSuite">
+    <listeners>
+        <listener class-name="gw.com.cn.CustomListener" />
+        <listener class-name="org.uncommons.reportng.HTMLReporter" />
+        <listener class-name="org.uncommons.reportng.JUnitXMLReporter" />
+    </listeners>
+    <test name="dzhSelfSelection">
+        <classes>
+            <class name="gw.com.cn.testcase.selfSelection.DZH_TestCase_SelfSelection_001"/>
+            <class name="gw.com.cn.testcase.selfSelection.DZH_TestCase_SelfSelection_002"/>
+            <class name="gw.com.cn.testcase.selfSelection.DZH_TestCase_SelfSelection_003"/>
+            <class name="gw.com.cn.testcase.selfSelection.DZH_TestCase_SelfSelection_004"/>
+        </classes>
+    </test>
+</suite>

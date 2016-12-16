@@ -1,0 +1,29 @@
+{
+  "address": "http://127.0.0.1",
+  "ftpPath": "10.15.54.198",
+  "port": "4723",
+  "sdkPath": "D:\\Program\\sdk",
+  "appPath": "C:\\dzh.apk",
+  "downloadAppFromServer": false,
+  "replaceExistingApp" : false,
+  "devices": [
+    {
+      "deviceType": "master",
+      "deviceName": "71MBBLE23Z3R",
+      "platformName": "Android",
+      "platformVersion": "23",
+      "automationName": "dazhihui",
+      "language": "zh_CN",
+      "locale": "CN"
+    },
+    {
+      "deviceType": "slave",
+      "deviceName": "71MBBLE23Z3R",
+      "platformName": "Android",
+      "platformVersion": "23",
+      "automationName": "dazhihui",
+      "language": "zh_CN",
+      "locale": "CN"
+    }
+  ]
+}

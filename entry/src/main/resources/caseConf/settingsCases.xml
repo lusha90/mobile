@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="dzhSuite">
+    <listeners>
+        <listener class-name="gw.com.cn.CustomListener" />
+        <listener class-name="org.uncommons.reportng.HTMLReporter" />
+        <listener class-name="org.uncommons.reportng.JUnitXMLReporter" />
+    </listeners>
+    <test name="dzhSettingsTest">
+        <classes>
+            <class name="gw.com.cn.testcase.settings.DZH_TestCase_Settings_001"/>
+            <class name="gw.com.cn.testcase.settings.DZH_TestCase_Settings_002"/>
+            <class name="gw.com.cn.testcase.settings.DZH_TestCase_Settings_003"/>
+            <class name="gw.com.cn.testcase.settings.DZH_TestCase_Settings_004"/>
+        </classes>
+    </test>
+</suite>

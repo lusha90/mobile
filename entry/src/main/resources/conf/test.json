@@ -1,0 +1,21 @@
+{
+  "address": "127.0.0.1",
+  "port": "4723",
+  "sdkPath": "D:\\Program\\sdk",
+  "appPath": "C:\\Users\\Administrator\\Downloads\\dzh.apk",
+  "devices": [{
+    "platformName": "Android",
+    "platformVersion": "23",
+    "automationName": "dazhihui",
+    "deviceName": "71MBBLE23Z3R",
+    "language": "zh_CN",
+    "locale": "CN"
+  }, {
+    "platformName": "Android",
+    "platformVersion": "23",
+    "automationName": "dazhihui",
+    "deviceName": "71MBBLE23Z3R",
+    "language": "zh_CN",
+    "locale": "CN"}
+  ]
+}

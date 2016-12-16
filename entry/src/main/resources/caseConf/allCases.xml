@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="dzhSuite">
+    <listeners>
+        <listener class-name="gw.com.cn.CustomListener"/>
+        <listener class-name="org.uncommons.reportng.DzhHTMLReporter"/>
+        <listener class-name="org.uncommons.reportng.JUnitXMLReporter"/>
+    </listeners>
+    <test name="dzhSettingsTest">
+        <classes>
+            <class name="gw.com.cn.testcase.settings.DZH_TestCase_Settings_001"/>
+            <class name="gw.com.cn.testcase.settings.DZH_TestCase_Settings_002"/>
+            <class name="gw.com.cn.testcase.settings.DZH_TestCase_Settings_003"/>
+            <class name="gw.com.cn.testcase.settings.DZH_TestCase_Settings_004"/>
+            <class name="gw.com.cn.testcase.settings.DZH_TestCase_Settings_001"/>
+            <class name="gw.com.cn.testcase.settings.DZH_TestCase_Settings_002"/>
+            <class name="gw.com.cn.testcase.settings.DZH_TestCase_Settings_003"/>
+            <class name="gw.com.cn.testcase.settings.DZH_TestCase_Settings_004"/>
+            <class name="gw.com.cn.testcase.settings.DZH_TestCase_Settings_001"/>
+            <class name="gw.com.cn.testcase.settings.DZH_TestCase_Settings_002"/>
+            <class name="gw.com.cn.testcase.settings.DZH_TestCase_Settings_003"/>
+            <class name="gw.com.cn.testcase.settings.DZH_TestCase_Settings_004"/>
+            <class name="gw.com.cn.testcase.settings.DZH_TestCase_Settings_001"/>
+            <class name="gw.com.cn.testcase.settings.DZH_TestCase_Settings_002"/>
+            <class name="gw.com.cn.testcase.settings.DZH_TestCase_Settings_003"/>
+            <class name="gw.com.cn.testcase.settings.DZH_TestCase_Settings_004"/>
+            <class name="gw.com.cn.testcase.settings.DZH_TestCase_Settings_001"/>
+            <class name="gw.com.cn.testcase.settings.DZH_TestCase_Settings_002"/>
+            <class name="gw.com.cn.testcase.settings.DZH_TestCase_Settings_003"/>
+            <class name="gw.com.cn.testcase.settings.DZH_TestCase_Settings_004"/>
+            <class name="gw.com.cn.testcase.settings.DZH_TestCase_Settings_001"/>
+            <class name="gw.com.cn.testcase.settings.DZH_TestCase_Settings_002"/>
+            <class name="gw.com.cn.testcase.settings.DZH_TestCase_Settings_003"/>
+            <class name="gw.com.cn.testcase.settings.DZH_TestCase_Settings_004"/>
+        </classes>
+    </test>
+    <test name="dzhNewsTest">
+        <classes>
+            <class name="gw.com.cn.testcase.news.DZH_TestCase_News_001"/>
+            <class name="gw.com.cn.testcase.news.DZH_TestCase_News_002"/>
+            <class name="gw.com.cn.testcase.news.DZH_TestCase_News_003"/>
+            <class name="gw.com.cn.testcase.news.DZH_TestCase_News_001"/>
+            <class name="gw.com.cn.testcase.news.DZH_TestCase_News_002"/>
+            <class name="gw.com.cn.testcase.news.DZH_TestCase_News_003"/>
+            <class name="gw.com.cn.testcase.news.DZH_TestCase_News_001"/>
+            <class name="gw.com.cn.testcase.news.DZH_TestCase_News_002"/>
+            <class name="gw.com.cn.testcase.news.DZH_TestCase_News_003"/>
+            <class name="gw.com.cn.testcase.news.DZH_TestCase_News_001"/>
+            <class name="gw.com.cn.testcase.news.DZH_TestCase_News_002"/>
+            <class name="gw.com.cn.testcase.news.DZH_TestCase_News_003"/>
+            <class name="gw.com.cn.testcase.news.DZH_TestCase_News_001"/>
+            <class name="gw.com.cn.testcase.news.DZH_TestCase_News_002"/>
+            <class name="gw.com.cn.testcase.news.DZH_TestCase_News_003"/>
+            <class name="gw.com.cn.testcase.news.DZH_TestCase_News_001"/>
+            <class name="gw.com.cn.testcase.news.DZH_TestCase_News_002"/>
+            <class name="gw.com.cn.testcase.news.DZH_TestCase_News_003"/>
+            <class name="gw.com.cn.testcase.news.DZH_TestCase_News_001"/>
+            <class name="gw.com.cn.testcase.news.DZH_TestCase_News_002"/>
+            <class name="gw.com.cn.testcase.news.DZH_TestCase_News_003"/>
+            <class name="gw.com.cn.testcase.news.DZH_TestCase_News_001"/>
+            <class name="gw.com.cn.testcase.news.DZH_TestCase_News_002"/>
+            <class name="gw.com.cn.testcase.news.DZH_TestCase_News_003"/>
+            <class name="gw.com.cn.testcase.news.DZH_TestCase_News_004"/>
+        </classes>
+    </test>
+    <test name="dzhSelfSelection">
+        <classes>
+            <class name="gw.com.cn.testcase.selfSelection.DZH_TestCase_SelfSelection_001"/>
+            <class name="gw.com.cn.testcase.selfSelection.DZH_TestCase_SelfSelection_002"/>
+            <class name="gw.com.cn.testcase.selfSelection.DZH_TestCase_SelfSelection_003"/>
+            <class name="gw.com.cn.testcase.selfSelection.DZH_TestCase_SelfSelection_004"/>
+            <class name="gw.com.cn.testcase.selfSelection.DZH_TestCase_SelfSelection_001"/>
+            <class name="gw.com.cn.testcase.selfSelection.DZH_TestCase_SelfSelection_002"/>
+            <class name="gw.com.cn.testcase.selfSelection.DZH_TestCase_SelfSelection_003"/>
+            <class name="gw.com.cn.testcase.selfSelection.DZH_TestCase_SelfSelection_004"/>
+            <class name="gw.com.cn.testcase.selfSelection.DZH_TestCase_SelfSelection_001"/>
+            <class name="gw.com.cn.testcase.selfSelection.DZH_TestCase_SelfSelection_002"/>
+            <class name="gw.com.cn.testcase.selfSelection.DZH_TestCase_SelfSelection_003"/>
+            <class name="gw.com.cn.testcase.selfSelection.DZH_TestCase_SelfSelection_004"/>
+            <class name="gw.com.cn.testcase.selfSelection.DZH_TestCase_SelfSelection_001"/>
+            <class name="gw.com.cn.testcase.selfSelection.DZH_TestCase_SelfSelection_002"/>
+            <class name="gw.com.cn.testcase.selfSelection.DZH_TestCase_SelfSelection_003"/>
+            <class name="gw.com.cn.testcase.selfSelection.DZH_TestCase_SelfSelection_004"/>
+            <class name="gw.com.cn.testcase.selfSelection.DZH_TestCase_SelfSelection_001"/>
+            <class name="gw.com.cn.testcase.selfSelection.DZH_TestCase_SelfSelection_002"/>
+            <class name="gw.com.cn.testcase.selfSelection.DZH_TestCase_SelfSelection_003"/>
+            <class name="gw.com.cn.testcase.selfSelection.DZH_TestCase_SelfSelection_004"/>
+            <class name="gw.com.cn.testcase.selfSelection.DZH_TestCase_SelfSelection_001"/>
+            <class name="gw.com.cn.testcase.selfSelection.DZH_TestCase_SelfSelection_002"/>
+            <class name="gw.com.cn.testcase.selfSelection.DZH_TestCase_SelfSelection_003"/>
+            <class name="gw.com.cn.testcase.selfSelection.DZH_TestCase_SelfSelection_004"/>
+            <class name="gw.com.cn.testcase.selfSelection.DZH_TestCase_SelfSelection_001"/>
+            <class name="gw.com.cn.testcase.selfSelection.DZH_TestCase_SelfSelection_002"/>
+            <class name="gw.com.cn.testcase.selfSelection.DZH_TestCase_SelfSelection_003"/>
+            <class name="gw.com.cn.testcase.selfSelection.DZH_TestCase_SelfSelection_004"/>
+            <class name="gw.com.cn.testcase.selfSelection.DZH_TestCase_SelfSelection_001"/>
+            <class name="gw.com.cn.testcase.selfSelection.DZH_TestCase_SelfSelection_002"/>
+            <class name="gw.com.cn.testcase.selfSelection.DZH_TestCase_SelfSelection_003"/>
+            <class name="gw.com.cn.testcase.selfSelection.DZH_TestCase_SelfSelection_004"/>
+            <class name="gw.com.cn.testcase.selfSelection.DZH_TestCase_SelfSelection_001"/>
+            <class name="gw.com.cn.testcase.selfSelection.DZH_TestCase_SelfSelection_002"/>
+            <class name="gw.com.cn.testcase.selfSelection.DZH_TestCase_SelfSelection_003"/>
+            <class name="gw.com.cn.testcase.selfSelection.DZH_TestCase_SelfSelection_004"/>
+            <class name="gw.com.cn.testcase.selfSelection.DZH_TestCase_SelfSelection_001"/>
+            <class name="gw.com.cn.testcase.selfSelection.DZH_TestCase_SelfSelection_002"/>
+            <class name="gw.com.cn.testcase.selfSelection.DZH_TestCase_SelfSelection_003"/>
+            <class name="gw.com.cn.testcase.selfSelection.DZH_TestCase_SelfSelection_004"/>
+            <class name="gw.com.cn.testcase.selfSelection.DZH_TestCase_SelfSelection_001"/>
+            <class name="gw.com.cn.testcase.selfSelection.DZH_TestCase_SelfSelection_002"/>
+            <class name="gw.com.cn.testcase.selfSelection.DZH_TestCase_SelfSelection_003"/>
+            <class name="gw.com.cn.testcase.selfSelection.DZH_TestCase_SelfSelection_004"/>
+            <class name="gw.com.cn.testcase.selfSelection.DZH_TestCase_SelfSelection_001"/>
+            <class name="gw.com.cn.testcase.selfSelection.DZH_TestCase_SelfSelection_002"/>
+            <class name="gw.com.cn.testcase.selfSelection.DZH_TestCase_SelfSelection_003"/>
+            <class name="gw.com.cn.testcase.selfSelection.DZH_TestCase_SelfSelection_004"/>
+            <class name="gw.com.cn.testcase.selfSelection.DZH_TestCase_SelfSelection_001"/>
+            <class name="gw.com.cn.testcase.selfSelection.DZH_TestCase_SelfSelection_002"/>
+            <class name="gw.com.cn.testcase.selfSelection.DZH_TestCase_SelfSelection_003"/>
+            <class name="gw.com.cn.testcase.selfSelection.DZH_TestCase_SelfSelection_004"/>
+        </classes>
+    </test>
+</suite>
