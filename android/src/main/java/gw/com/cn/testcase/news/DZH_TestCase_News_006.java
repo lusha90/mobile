@@ -1,4 +1,4 @@
-package gw.com.cn.testcase.settings;
+package gw.com.cn.testcase.news;
 
 import gw.com.cn.testcase.DZHBaseTestCase;
 import org.testng.Assert;
@@ -9,17 +9,17 @@ import org.testng.annotations.Test;
 /**
  * Created by lusha on 2016/11/28.
  */
-public class DZH_TestCase_Settings_004 extends DZHBaseTestCase {
+public class DZH_TestCase_News_006 extends DZHBaseTestCase {
 
     @BeforeMethod
     public void setUp() {
         super.setUp();
+        Assert.assertEquals(1,2);
     }
 
    @Test(description = "设置界面打开同步自选股")
     public void testStep() {
         super.testStep();
-        Assert.assertEquals(1,2);
     }
 
     @AfterMethod

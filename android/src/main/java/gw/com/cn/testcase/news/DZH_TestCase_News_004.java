@@ -16,7 +16,7 @@ public class DZH_TestCase_News_004 extends DZHBaseTestCase {
         super.setUp();
     }
 
-    @Test(description = "设置界面打开同步自选股", dataProvider = "无")
+   @Test(description = "设置界面打开同步自选股")
     public void testStep() {
         super.testStep();
         Assert.assertEquals(1,2);

@@ -20,7 +20,7 @@ public class DZH_TestCase_SelfSelection_001 extends DZHBaseTestCase {
 //        selfSelectionAction.deleteAllSelfSelectionOrLatestBrowseOnEditSelectionView(true);
     }
 
-    @Test(description = "设置界面打开同步自选股")
+   @Test(description = "设置界面打开同步自选股")
     public void testStep() {
         super.testStep();
     }
