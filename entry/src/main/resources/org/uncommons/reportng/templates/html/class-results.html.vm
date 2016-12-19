@@ -93,7 +93,11 @@
 
     </td>
     <td class="screenshot">
-        NA
+        #if ( $testResult.status == 2)
+            <a href="../screenshot/$testResult.instanceName.$testResult.name$testInstanceName/fail.png">screenshot</a></br>
+        #else
+            NA
+        #end
     </td>
 </tr>
 #end
