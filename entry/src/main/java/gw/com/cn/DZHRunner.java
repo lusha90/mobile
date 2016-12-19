@@ -34,13 +34,13 @@ public class DZHRunner {
         for (int i = 0; i < jSONArray.length(); i++) {
             JSONObject deviceJSONObject = jSONArray.getJSONObject(i);
             DeviceInfo deviceInfo = new DeviceInfo();
-            deviceInfo.setDeviceType(jSONObject.has("deviceType") ? (String) deviceJSONObject.get("deviceType") : deviceInfo.getDeviceType());
-            deviceInfo.setPlatformName(jSONObject.has("platformName") ? (String) deviceJSONObject.get("platformName") : deviceInfo.getPlatformName());
-            deviceInfo.setPlatformVersion(jSONObject.has("platformVersion") ? (String) deviceJSONObject.get("platformVersion") : deviceInfo.getPlatformVersion());
-            deviceInfo.setAutomationName(jSONObject.has("automationName") ? (String) deviceJSONObject.get("automationName") : deviceInfo.getAutomationName());
-            deviceInfo.setDeviceName(jSONObject.has("deviceName") ? (String) deviceJSONObject.get("deviceName") : deviceInfo.getDeviceName());
-            deviceInfo.setLanguage(jSONObject.has("language") ? (String) deviceJSONObject.get("language") : deviceInfo.getLanguage());
-            deviceInfo.setLocale(jSONObject.has("locale") ? (String) deviceJSONObject.get("locale") : deviceInfo.getLocale());
+            deviceInfo.setDeviceType(deviceJSONObject.has("deviceType") ? (String) deviceJSONObject.get("deviceType") : deviceInfo.getDeviceType());
+            deviceInfo.setPlatformName(deviceJSONObject.has("platformName") ? (String) deviceJSONObject.get("platformName") : deviceInfo.getPlatformName());
+            deviceInfo.setPlatformVersion(deviceJSONObject.has("platformVersion") ? (String) deviceJSONObject.get("platformVersion") : deviceInfo.getPlatformVersion());
+            deviceInfo.setAutomationName(deviceJSONObject.has("automationName") ? (String) deviceJSONObject.get("automationName") : deviceInfo.getAutomationName());
+            deviceInfo.setDeviceName(deviceJSONObject.has("deviceName") ? (String) deviceJSONObject.get("deviceName") : deviceInfo.getDeviceName());
+            deviceInfo.setLanguage(deviceJSONObject.has("language") ? (String) deviceJSONObject.get("language") : deviceInfo.getLanguage());
+            deviceInfo.setLocale(deviceJSONObject.has("locale") ? (String) deviceJSONObject.get("locale") : deviceInfo.getLocale());
             devicesList.add(deviceInfo);
         }
         dzhInfo.setDevicesInfo(devicesList);
@@ -52,7 +52,7 @@ public class DZHRunner {
         return fillDZHInfo(file);
     }
 
-    public static void runDZHCases(String jsonFilePath, String testngXmlPath){
+    private static DZHInfo loadConf(String jsonFilePath, String testngXmlPath){
         File currentPath = new File("");
         jsonFilePath = currentPath.getAbsolutePath() + jsonFilePath;
         testngXmlPath = currentPath.getAbsolutePath() + testngXmlPath;
@@ -70,7 +70,11 @@ public class DZHRunner {
             }
             ftpUtil.closeConnect();
         }
-        BaseAction.dzhInfo = dzhInfo;
+        return dzhInfo;
+    }
+
+    public static void runDZHCases(String jsonFilePath, String testngXmlPath){
+        BaseAction.dzhInfo = loadConf(jsonFilePath, testngXmlPath);
         LogUtil.getLogger().info("################################# start of the test #################################");
         TestNG testng = new TestNG();
         testng.setUseDefaultListeners(false);

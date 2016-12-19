@@ -329,8 +329,8 @@ public class DZHAndroidDriver extends AndroidDriver {
             BufferedImage subSourceImage = ImageUtil.getSubImage(sourceImage, x, y, w, h);
             BufferedImage subTargetImage = ImageUtil.getSubImage(targetImage, x, y, w, h);
             if (isSaveSubImage) {
-                ImageUtil.saveImageToFile(subSourceImage, "png", System.getProperty("user.dir") + "source.png");
-                ImageUtil.saveImageToFile(subTargetImage, "png", System.getProperty("user.dir") + "target.png");
+                ImageUtil.saveImageToFile(subSourceImage, "png", System.getProperty("java.io.tmpdir") + "source.png");
+                ImageUtil.saveImageToFile(subTargetImage, "png", System.getProperty("java.io.tmpdir") + "target.png");
             }
             result = ImageUtil.isSame(subSourceImage, subTargetImage, percent);
         } catch (IOException e) {
