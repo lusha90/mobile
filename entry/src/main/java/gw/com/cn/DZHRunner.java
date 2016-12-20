@@ -3,12 +3,14 @@ package gw.com.cn;
 import gw.com.cn.util.FtpUtil;
 import gw.com.cn.util.JsonUtil;
 import gw.com.cn.util.LogUtil;
+import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.testng.TestNG;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +19,7 @@ import java.util.List;
  */
 public class DZHRunner {
 
-    private static DZHInfo  fillDZHInfo(File jsonFile){
+    private static DZHInfo fillDZHInfo(File jsonFile){
         JSONObject jSONObject = JsonUtil.readJson(jsonFile);
         DZHInfo dzhInfo = new DZHInfo();
         dzhInfo.setAddress(jSONObject.has("address") ? (String) jSONObject.get("address") : dzhInfo.getAddress());
@@ -52,12 +54,22 @@ public class DZHRunner {
         return fillDZHInfo(file);
     }
 
-    private static DZHInfo loadConf(String jsonFilePath, String testngXmlPath){
+    private void loadConfFromClassPath(){
+        InputStream inputStream = this.getClass().getResourceAsStream("/caseConf/allCases.xml");
+        InputStream inputStreamJson = this.getClass().getResourceAsStream("/conf/master.json");
+        String jsonStr = null;
+        try {
+            jsonStr = IOUtils.toString(inputStreamJson);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private static DZHInfo loadConf(String jsonFilePath){
         File currentPath = new File("");
         jsonFilePath = currentPath.getAbsolutePath() + jsonFilePath;
-        testngXmlPath = currentPath.getAbsolutePath() + testngXmlPath;
         LogUtil.getLogger().info("loading json : " + jsonFilePath);
-        LogUtil.getLogger().info("loading cases : " + testngXmlPath);
         DZHInfo dzhInfo = fillDZHInfo(jsonFilePath);
         if(dzhInfo.isDownloadAppFromServer()){
             LogUtil.getLogger().info("download newest app from ftp server : " + dzhInfo.getFtpPath());
@@ -74,7 +86,9 @@ public class DZHRunner {
     }
 
     public static void runDZHCases(String jsonFilePath, String testngXmlPath){
-        BaseAction.dzhInfo = loadConf(jsonFilePath, testngXmlPath);
+        BaseAction.dzhInfo = loadConf(jsonFilePath);
+        File currentPath = new File("");
+        testngXmlPath = currentPath.getAbsolutePath() + testngXmlPath;
         LogUtil.getLogger().info("################################# start of the test #################################");
         TestNG testng = new TestNG();
         testng.setUseDefaultListeners(false);
