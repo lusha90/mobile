@@ -45,7 +45,7 @@ import org.testng.xml.XmlSuite;
  * output.
  * @author Daniel Dyer
  */
-public class DzhHTMLReporter extends AbstractReporter
+public class DzhHTMLReporter extends DzhAbstractReporter
 {
     private static final String FRAMES_PROPERTY = "org.uncommons.reportng.frames";
     private static final String ONLY_FAILURES_PROPERTY = "org.uncommons.reportng.failures-only";
