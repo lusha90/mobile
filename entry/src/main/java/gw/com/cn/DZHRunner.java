@@ -3,6 +3,7 @@ package gw.com.cn;
 import gw.com.cn.util.FtpUtil;
 import gw.com.cn.util.JsonUtil;
 import gw.com.cn.util.LogUtil;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -18,6 +19,15 @@ import java.util.List;
  * Created by lusha on 2016/11/28.
  */
 public class DZHRunner {
+
+    public static final String DZH_LOG = "logs";
+
+    public static final String DZH_REPORT = "dzhReport";
+
+    public static final String DZH_LOGCAT = "logcat";
+
+    public static final String DZH_SCREENSHOT = "screenshot";
+
 
     private static DZHInfo fillDZHInfo(File jsonFile){
         JSONObject jSONObject = JsonUtil.readJson(jsonFile);
@@ -95,7 +105,7 @@ public class DZHRunner {
         List<String> suites = new ArrayList<String>();
         suites.add(testngXmlPath);
         testng.setTestSuites(suites);
-        testng.setOutputDirectory(new File(".").getAbsolutePath() + File.separator + "dzhReport");
+        testng.setOutputDirectory(new File(".").getAbsolutePath() + File.separator + DZH_REPORT);
         testng.run();
         LogUtil.getLogger().info("#################################  end of the test  #################################\n");
         System.exit(testng.getStatus());
@@ -107,10 +117,18 @@ public class DZHRunner {
         TestNG.main(new String[]{testngXmlFile.getAbsolutePath()});
     }
 
+    private static void cleanLogAndReport(){
+        String reportPath = new File(".").getAbsolutePath() + File.separator + DZH_REPORT;
+        String logPath = new File(".").getAbsolutePath() + File.separator + DZH_LOG;
+        FileUtils.deleteQuietly(new File(reportPath));
+        FileUtils.deleteQuietly(new File(logPath));
+    }
+
     public static void main(String[] args) {
         if(args.length < 2){
             throw new RuntimeException("args error");
         }
+        cleanLogAndReport();
         String jsonFilePath = args[0];
         String testngXmlPath = args[1];
         runDZHCases(jsonFilePath, testngXmlPath);
