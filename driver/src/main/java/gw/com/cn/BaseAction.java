@@ -1,9 +1,8 @@
 package gw.com.cn;
 
+import gw.com.cn.util.LogUtil;
 import io.appium.java_client.android.AndroidKeyCode;
-import org.openqa.selenium.By;
 import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -35,9 +34,9 @@ public class BaseAction {
                 capabilities.setCapability("deviceName", device.getDeviceName());
                 capabilities.setCapability("platformName", device.getPlatformName());
                 capabilities.setCapability("platformVersion", device.getPlatformVersion());
-                capabilities.setCapability("automationName", device.getPlatformVersion());
-                capabilities.setCapability("language", device.getPlatformVersion());
-                capabilities.setCapability("locale", device.getPlatformVersion());
+                capabilities.setCapability("automationName", device.getAutomationName());
+                capabilities.setCapability("language", device.getLanguage());
+                capabilities.setCapability("locale", device.getLocale());
                 capabilities.setCapability("appPackage", "com.android.dazhihui");
                 capabilities.setCapability("appActivity", "com.android.dazhihui.dzh.dzh");
                 break;
@@ -45,7 +44,7 @@ public class BaseAction {
         }
         try {
             URL url = new URL(dzhInfo.getAddress() + ":" + dzhInfo.getPort() + "/wd/hub");
-            System.out.println("restful address : " + url.toString());
+            LogUtil.getLogger().info("restful address : " + url.toString());
             dzhAndroidDriver = new DZHAndroidDriver(url, capabilities);
         } catch (MalformedURLException e) {
             e.printStackTrace();
