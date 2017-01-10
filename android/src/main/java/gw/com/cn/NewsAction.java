@@ -1,8 +1,5 @@
 package gw.com.cn;
 
-import io.appium.java_client.android.AndroidDriver;
-import io.appium.java_client.ios.IOSDriver;
-
 /**
  * Created by lusha on 2016/11/28.
  */
@@ -15,4 +12,8 @@ public class NewsAction extends BaseAction{
     public void openNews(){
         return;
     }
+
+    /**
+     * Created by Administrator on 2017/1/9.
+     */
 }

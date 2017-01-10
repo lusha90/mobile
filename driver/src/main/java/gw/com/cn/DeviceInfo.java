@@ -5,6 +5,10 @@ package gw.com.cn;
  */
 public class DeviceInfo {
 
+    private String deviceBrand = "huawei";
+
+    private String brandSeries = "mate9";
+
     private String deviceType = "master";
 
     private String platformName = "Android";
@@ -18,6 +22,32 @@ public class DeviceInfo {
     private String language = "zh_CN";
 
     private String locale = "CN";
+
+    private String sessionTimeout = "60";
+
+    public String getDeviceBrand() {
+        return deviceBrand;
+    }
+
+    public void setDeviceBrand(String deviceBrand) {
+        this.deviceBrand = deviceBrand;
+    }
+
+    public String getBrandSeries() {
+        return brandSeries;
+    }
+
+    public void setBrandSeries(String brandSeries) {
+        this.brandSeries = brandSeries;
+    }
+
+    public String getSessionTimeout() {
+        return sessionTimeout;
+    }
+
+    public void setSessionTimeout(String sessionTimeout) {
+        this.sessionTimeout = sessionTimeout;
+    }
 
     public String getDeviceType() {
         return deviceType;

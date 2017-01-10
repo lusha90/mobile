@@ -8,20 +8,26 @@
   "replaceExistingApp" : false,
   "devices": [
     {
+      "deviceBrand": "google",
+      "brandSeries": "nexus6p",
       "deviceType": "master",
-      "deviceName": "71MBBLE23Z3R",
+      "deviceName": "ENU7N16709000499",
       "platformName": "Android",
-      "platformVersion": "23",
-      "automationName": "dazhihui",
+      "platformVersion": "25",
+      "automationName": "Appium",
+      "sessionTimeout": "120",
       "language": "zh_CN",
       "locale": "CN"
     },
     {
+      "deviceBrand": "meizu",
+      "brandSeries": "note1",
       "deviceType": "slave",
-      "deviceName": "71MBBLE23Z3R",
+      "deviceName": "304d1165ec0baf8f",
       "platformName": "Android",
       "platformVersion": "23",
-      "automationName": "dazhihui",
+      "automationName": "Appium",
+      "sessionTimeout": "120",
       "language": "zh_CN",
       "locale": "CN"
     }

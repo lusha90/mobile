@@ -1,5 +1,7 @@
 package gw.com.cn;
 
+import gw.com.cn.util.Adb;
+import gw.com.cn.util.ImageContainUtil;
 import gw.com.cn.util.ImageUtil;
 import io.appium.java_client.TouchShortcuts;
 import io.appium.java_client.android.*;
@@ -320,12 +322,16 @@ public class DZHAndroidDriver extends AndroidDriver {
     /**
      * This method  compare two images
      */
-    public boolean pictureCompare(String sourceImagePath, int x, int y, int w, int h, double percent, boolean isSaveSubImage) {
+    public boolean isContainImage(String targetImagePath, int x, int y, int w, int h, double percent, boolean isSaveSubImage) {
         boolean result = false;
+        String basePath = "/picture" + File.separator +
+                this.getCapabilities().getCapability("deviceBrand") + File.separator +
+                this.getCapabilities().getCapability("brandSeries") + File.separator;
+        targetImagePath = basePath + targetImagePath;
         try {
             File snapshotFile = this.getScreenshotAs(OutputType.FILE);
-            BufferedImage sourceImage = ImageIO.read(this.getClass().getResource(sourceImagePath));
-            BufferedImage targetImage = ImageIO.read(snapshotFile);
+            BufferedImage targetImage = ImageIO.read(this.getClass().getResource(targetImagePath));
+            BufferedImage sourceImage = ImageIO.read(snapshotFile);
             BufferedImage subSourceImage = ImageUtil.getSubImage(sourceImage, x, y, w, h);
             BufferedImage subTargetImage = ImageUtil.getSubImage(targetImage, x, y, w, h);
             if (isSaveSubImage) {
@@ -339,17 +345,39 @@ public class DZHAndroidDriver extends AndroidDriver {
         return result;
     }
 
-
+    public boolean isContainImage(String targetImagePath){
+        boolean tag = false;
+        try {
+            String basePath = "/picture" + File.separator +
+                    this.getCapabilities().getCapability("deviceBrand") + File.separator +
+                    this.getCapabilities().getCapability("brandSeries") + File.separator;
+            targetImagePath = basePath + targetImagePath;
+            File snapshotFile = this.getScreenshotAs(OutputType.FILE);
+            BufferedImage sourceImage = ImageIO.read(snapshotFile);
+            BufferedImage targetImage = ImageIO.read(this.getClass().getResource(targetImagePath));
+            ImageContainUtil imageContainUtil = new ImageContainUtil(sourceImage, targetImage);
+            imageContainUtil.findImage();
+            tag = imageContainUtil.isFind();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return tag;
+    }
 
     public void loadPicture(){
         try {
             Image image = ImageIO.read(this.getClass().getResource("/picture/settings/test.png"));
             int width = image.getWidth(null);
-            System.out.println("***************width: " + width);
             int height = image.getHeight(null);
-            System.out.println("***************height: " + height);
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public int getScreenDensity(){
+        String sdkPath = (String) this.getCapabilities().getCapability("sdkPath");
+        String deviceName = (String) this.getCapabilities().getCapability("deviceName");
+        Adb adb = new Adb(sdkPath, deviceName);
+        return  adb.getScreenDensity();
     }
 }

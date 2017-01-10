@@ -1,6 +1,9 @@
 package gw.com.cn.util;
 
+import org.apache.commons.io.FileUtils;
+
 import java.io.*;
+import java.util.List;
 
 /**
  * Created by lusha on 2016/12/16.
@@ -15,14 +18,22 @@ public class Adb {
         this.adbShellCmd = this.adbCmd + " shell ";
     }
 
-    private void executeAdbCmd(String cmd){
+    public Adb(String deviceName) {
+        this.adbCmd = this.adbCmd + " -s " + deviceName;
+        this.adbShellCmd = this.adbCmd + " shell ";
+    }
+
+    private File executeAdbCmd(String cmd){
+        File file = null;
         try {
             String command = "cmd.exe /C " + cmd;
             LogUtil.getLogger().info(command);
-            CommandUtil.executeCommand(command, new FileOutputStream(System.getProperty("java.io.tmpdir") + File.separator + "adbTempLog"));
+            file = new File(System.getProperty("java.io.tmpdir") + File.separator + "adbTempLog");
+            CommandUtil.executeCommand(command, new FileOutputStream(file));
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return file;
     }
 
     private void executeAdbCmdWithLogToFile(String cmd, String logPath){
@@ -74,6 +85,24 @@ public class Adb {
     public void adbGetLogcat(String logPath){
         String cmd = this.adbCmd + " logcat -d";
         this.executeAdbCmdWithLogToFile(cmd, logPath);
+    }
+
+    public int getScreenDensity(){
+        String cmd = this.adbShellCmd + "getprop";
+        File file = this.executeAdbCmd(cmd);
+        List<String> list = null;
+        int density = 160;
+        try {
+            list = FileUtils.readLines(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        for (String line : list) {
+            if(line.contains("density")){
+                density = Integer.parseInt(line.split("\\:")[1].trim().replace("[", "").replace("]", ""));
+            }
+        }
+        return density;
     }
 
     public void adbShell(){

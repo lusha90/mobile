@@ -46,6 +46,8 @@ public class DZHRunner {
         for (int i = 0; i < jSONArray.length(); i++) {
             JSONObject deviceJSONObject = jSONArray.getJSONObject(i);
             DeviceInfo deviceInfo = new DeviceInfo();
+            deviceInfo.setDeviceBrand(deviceJSONObject.has("deviceBrand") ? (String) deviceJSONObject.get("deviceBrand") : deviceInfo.getDeviceBrand());
+            deviceInfo.setBrandSeries(deviceJSONObject.has("brandSeries") ? (String) deviceJSONObject.get("brandSeries") : deviceInfo.getBrandSeries());
             deviceInfo.setDeviceType(deviceJSONObject.has("deviceType") ? (String) deviceJSONObject.get("deviceType") : deviceInfo.getDeviceType());
             deviceInfo.setPlatformName(deviceJSONObject.has("platformName") ? (String) deviceJSONObject.get("platformName") : deviceInfo.getPlatformName());
             deviceInfo.setPlatformVersion(deviceJSONObject.has("platformVersion") ? (String) deviceJSONObject.get("platformVersion") : deviceInfo.getPlatformVersion());
@@ -53,6 +55,7 @@ public class DZHRunner {
             deviceInfo.setDeviceName(deviceJSONObject.has("deviceName") ? (String) deviceJSONObject.get("deviceName") : deviceInfo.getDeviceName());
             deviceInfo.setLanguage(deviceJSONObject.has("language") ? (String) deviceJSONObject.get("language") : deviceInfo.getLanguage());
             deviceInfo.setLocale(deviceJSONObject.has("locale") ? (String) deviceJSONObject.get("locale") : deviceInfo.getLocale());
+            deviceInfo.setSessionTimeout(deviceJSONObject.has("sessionTimeout") ? (String) deviceJSONObject.get("sessionTimeout") : deviceInfo.getSessionTimeout());
             devicesList.add(deviceInfo);
         }
         dzhInfo.setDevicesInfo(devicesList);
@@ -73,7 +76,6 @@ public class DZHRunner {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     private static DZHInfo loadConf(String jsonFilePath){

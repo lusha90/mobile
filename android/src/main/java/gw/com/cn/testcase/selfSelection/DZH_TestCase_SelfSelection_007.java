@@ -7,7 +7,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-public class DZH_TestCase_SelfSelection_004 extends DZHBaseTestCase {
+public class DZH_TestCase_SelfSelection_007 extends DZHBaseTestCase {
 
     private SelfSelectionAction selfSelectionAction;
 
@@ -25,7 +25,7 @@ public class DZH_TestCase_SelfSelection_004 extends DZHBaseTestCase {
         selfSelectionAction.back();
     }
 
-    @Test(description = "自选股最新排序")
+    @Test(description = "自选股涨跌额排序")
     public void testStep() {
         super.testStep();
         LogUtil.getLogger().info("1：进入自选股页面");
@@ -38,18 +38,19 @@ public class DZH_TestCase_SelfSelection_004 extends DZHBaseTestCase {
         LogUtil.getLogger().info("5：返回到自选股页面");
         selfSelectionAction.back();
         selfSelectionAction.back();
-        LogUtil.getLogger().info("6：点击最新按钮进行降序排序");
-        selfSelectionAction.newestSortOnSelfSelectionView(true);
-        selfSelectionAction.checkNewestSortOnSelfSelectionView(true);
-        LogUtil.getLogger().info("7：点击最新按钮进行升序排序");
-        selfSelectionAction.newestSortOnSelfSelectionView(false);
-        selfSelectionAction.checkNewestSortOnSelfSelectionView(false);
+        LogUtil.getLogger().info("6：点击涨跌额按钮进行降序排序");
+        selfSelectionAction.increaseSortOnSelfSelectionView(true);
+        selfSelectionAction.checkIncreaseSortOnSelfSelectionView(true);
+        LogUtil.getLogger().info("7：点击涨跌额按钮进行升序排序");
+        selfSelectionAction.increaseSortOnSelfSelectionView(false);
+        selfSelectionAction.checkIncreaseSortOnSelfSelectionView(false);
+        LogUtil.getLogger().info("8：点击涨跌额按钮进行取消排序");
+        selfSelectionAction.cancelSortOnSelfSelectionView();
     }
 
     @AfterMethod
     public void tearDown() {
         super.tearDown();
-        selfSelectionAction.back();
         selfSelectionAction.enterIntoEditSelectionViewOnSelfSelectionView();
         selfSelectionAction.deleteAllSelfSelectionOrLatestBrowseOnEditSelectionView(true);
         selfSelectionAction.back();
