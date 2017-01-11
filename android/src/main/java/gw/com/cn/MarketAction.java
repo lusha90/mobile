@@ -5,7 +5,14 @@ package gw.com.cn;
  */
 public class MarketAction extends BaseAction{
 
+    public CheckPoint checkPoint;
+
     public MarketAction(String deviceType) {
         super(deviceType);
+        checkPoint = new CheckPoint(this.getDzhAndroidDriver());
+    }
+
+    public void test(){
+
     }
 }

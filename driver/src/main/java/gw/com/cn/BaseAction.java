@@ -7,6 +7,7 @@ import gw.com.cn.util.LogUtil;
 import io.appium.java_client.android.AndroidKeyCode;
 import org.apache.commons.lang3.CharUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.lang.reflect.InvocationTargetException;
@@ -24,27 +25,7 @@ public class BaseAction {
 
     private static DZHAndroidDriver dzhAndroidDriver;
 
-    private DzhDigitKeyboard dzhDigitKeyboard;
-
-    private DzhLetterKeyboard dzhLetterKeyboard;
-
     private Adb adb;
-
-    public DzhDigitKeyboard getDzhDigitKeyboard() {
-        return dzhDigitKeyboard;
-    }
-
-    public void setDzhDigitKeyboard(DzhDigitKeyboard dzhDigitKeyboard) {
-        this.dzhDigitKeyboard = dzhDigitKeyboard;
-    }
-
-    public DzhLetterKeyboard getDzhLetterKeyboard() {
-        return dzhLetterKeyboard;
-    }
-
-    public void setDzhLetterKeyboard(DzhLetterKeyboard dzhLetterKeyboard) {
-        this.dzhLetterKeyboard = dzhLetterKeyboard;
-    }
 
     public void initDZHInfo(DZHInfo dzhInfo_) {
         if (dzhInfo == null && dzhInfo_ != null) {
@@ -82,15 +63,27 @@ public class BaseAction {
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-        this.sleep(10);
+        this.waitForAdvEnd();
+    }
+
+    private void waitForAdvEnd(){
+        int count = 1;
+        while (true){
+            try {
+                this.getDzhAndroidDriver().findElementById("com.android.dazhihui:id/bottom_menu_button_1");
+                break;
+            }catch (NoSuchElementException e){
+                LogUtil.getLogger().info("*************** 第" + count + "次等待开机广告结束 ***************");
+                count++;
+                this.sleep(1);
+            }
+        }
     }
 
     public BaseAction(String deviceType) {
         if (this.getDzhAndroidDriver() == null) {
             this.createDZHAndroidDriver(deviceType);
         }
-        dzhDigitKeyboard = new DzhDigitKeyboard(this.getDzhAndroidDriver());
-        dzhLetterKeyboard = new DzhLetterKeyboard(this.getDzhAndroidDriver());
     }
 
     public DZHAndroidDriver getDzhAndroidDriver() {
@@ -99,10 +92,6 @@ public class BaseAction {
 
     public void setDzhAndroidDriver(DZHAndroidDriver dzhAndroidDriver) {
         this.dzhAndroidDriver = dzhAndroidDriver;
-    }
-
-    public void initKeyBoard() {
-
     }
 
     public void openDZHApp() {
@@ -172,11 +161,15 @@ public class BaseAction {
     }
 
     public void dzhKeyboardTypeContent(String content) {
+        DzhDigitKeyboard dzhDigitKeyboard = new DzhDigitKeyboard(this.getDzhAndroidDriver());
+        DzhLetterKeyboard dzhLetterKeyboard = new DzhLetterKeyboard(this.getDzhAndroidDriver());
         for (char symbol : content.toCharArray()) {
             try {
                 if (CharUtils.isAsciiNumeric(symbol)) {
+                    dzhDigitKeyboard.switchDigitKeyboard();
                     MethodUtils.invokeExactMethod(dzhDigitKeyboard, "tap_" + symbol);
                 } else if (CharUtils.isAsciiAlpha(symbol)) {
+                    dzhLetterKeyboard.switchLetterKeyboard();
                     MethodUtils.invokeExactMethod(dzhLetterKeyboard, "tap_" + symbol);
                 }
             } catch (NoSuchMethodException e) {

@@ -1,7 +1,8 @@
 package gw.com.cn.keyboard;
 
 import gw.com.cn.DZHAndroidDriver;
-import org.openqa.selenium.Rectangle;
+import org.openqa.selenium.Dimension;
+import org.openqa.selenium.NoSuchElementException;
 
 /**
  * Created by lusha on 2017/1/9.
@@ -14,9 +15,15 @@ public class Keyboard {
 
     public Keyboard(DZHAndroidDriver dzhAndroidDriver) {
         this.dzhAndroidDriver = dzhAndroidDriver;
-        Rectangle rectangle = this.dzhAndroidDriver.findElementById("com.android.dazhihui:id/keyboard_view").getRect();
-        width = rectangle.getWidth();
-        height = rectangle.getHeight();
+        Dimension dimension;
+        try{
+            dimension = this.dzhAndroidDriver.findElementById("com.android.dazhihui:id/keyboard_view").getSize();
+            height = dimension.getHeight();
+        }catch (NoSuchElementException e){
+            dimension = this.dzhAndroidDriver.findElementById("com.android.dazhihui:id/keyboard_title").getSize();
+            height = dimension.getHeight() * 5;
+        }
+        width = dimension.getWidth();
     }
 
     public void switchDigitKeyboard(){
