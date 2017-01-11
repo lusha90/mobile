@@ -30,7 +30,7 @@ public class DZH_TestCase_SelfSelection_002 extends DZHBaseTestCase {
         super.testStep();
         LogUtil.getLogger().info("1：进入自选股页面");
         LogUtil.getLogger().info("2：点击搜索图标");
-        selfSelectionAction.enterIntoSearchStockViewOnEditSelectionView();
+        selfSelectionAction.enterIntoSearchStockViewOnSelfSelectionView();
         LogUtil.getLogger().info("3：股票代码输入框输入555");
         selfSelectionAction.typeTextOnSearchStockView("555");
         LogUtil.getLogger().info("4：依次按顺序添加5个自选股");

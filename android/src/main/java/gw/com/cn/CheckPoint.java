@@ -17,7 +17,7 @@ public class CheckPoint extends Assert{
 
     public void checkTextExist(String text){
         this.dzhAndroidDriver.findElementsByName(text);
-        LogUtil.getLogger().debug(" <<<<<<<<<< 检查当前页面存在[" + text + "]关键字 >>>>>>>>>>>");
+        LogUtil.getLogger().info(" <<<<<<<<<< 检查当前页面存在[" + text + "]关键字 >>>>>>>>>>>");
     }
 
     public void checkTextNotExist(String text){
@@ -27,13 +27,13 @@ public class CheckPoint extends Assert{
         }catch (NoSuchElementException e){
             tag = true;
         }
-        LogUtil.getLogger().debug(" <<<<<<<<<< 检查当前页面不存在[" + text + "]关键字 >>>>>>>>>>>");
+        LogUtil.getLogger().info(" <<<<<<<<<< 检查当前页面不存在[" + text + "]关键字 >>>>>>>>>>>");
         Assert.assertEquals(true, tag, " <<<<<<<<<< 检查当前页面不存在[" + text + "]关键字 >>>>>>>>>>>");
     }
 
     public void checkIDExist(String id){
         this.dzhAndroidDriver.findElementById(id);
-        LogUtil.getLogger().debug(" <<<<<<<<<< 检查当前页面存在[" + id + "]标识 >>>>>>>>>>>");
+        LogUtil.getLogger().info(" <<<<<<<<<< 检查当前页面存在[" + id + "]标识 >>>>>>>>>>>");
     }
 
     public void checkIDNotExist(String id){
@@ -43,7 +43,7 @@ public class CheckPoint extends Assert{
         }catch (NoSuchElementException e){
             tag = true;
         }
-        LogUtil.getLogger().debug(" <<<<<<<<<< 检查当前页面不存在[" + id + "]标识 >>>>>>>>>>>");
+        LogUtil.getLogger().info(" <<<<<<<<<< 检查当前页面不存在[" + id + "]标识 >>>>>>>>>>>");
         Assert.assertEquals(true, tag, " <<<<<<<<<< 检查当前页面不存在[" + id + "]标识 >>>>>>>>>>>");
     }
 

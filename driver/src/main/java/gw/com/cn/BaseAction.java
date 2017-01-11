@@ -172,6 +172,7 @@ public class BaseAction {
                     dzhLetterKeyboard.switchLetterKeyboard();
                     MethodUtils.invokeExactMethod(dzhLetterKeyboard, "tap_" + symbol);
                 }
+                this.sleep(3);
             } catch (NoSuchMethodException e) {
                 e.printStackTrace();
             } catch (IllegalAccessException e) {

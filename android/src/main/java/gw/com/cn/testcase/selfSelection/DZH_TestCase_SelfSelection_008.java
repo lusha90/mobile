@@ -32,7 +32,7 @@ public class DZH_TestCase_SelfSelection_008 extends DZHBaseTestCase {
         super.testStep();
         LogUtil.getLogger().info("1：进入自选股页面");
         LogUtil.getLogger().info("2：点击搜索图标");
-        selfSelectionAction.enterIntoSearchStockViewOnEditSelectionView();
+        selfSelectionAction.enterIntoSearchStockViewOnSelfSelectionView();
         LogUtil.getLogger().info("3：股票代码输入框输入555");
         selfSelectionAction.typeTextOnSearchStockView("555");
         LogUtil.getLogger().info("4：依次按顺序添加5个自选股");
@@ -44,7 +44,7 @@ public class DZH_TestCase_SelfSelection_008 extends DZHBaseTestCase {
         selfSelectionAction.increaseSortOnSelfSelectionView(true);
         selfSelectionAction.checkIncreaseSortOnSelfSelectionView(true);
         LogUtil.getLogger().info("7：点击搜索图标添加一个自选股后返回到自选股首页");
-        selfSelectionAction.enterIntoSearchStockViewOnSelectionView();
+        selfSelectionAction.enterIntoSearchStockViewOnEditSelfSelectionView();
         selfSelectionAction.typeTextOnSearchStockView("333");
         stocks.addAll(selfSelectionAction.addStocksOnSearchStockView(1));
         selfSelectionAction.back();
@@ -54,7 +54,7 @@ public class DZH_TestCase_SelfSelection_008 extends DZHBaseTestCase {
         selfSelectionAction.increaseSortOnSelfSelectionView(false);
         selfSelectionAction.checkIncreaseSortOnSelfSelectionView(false);
         LogUtil.getLogger().info("9：点击搜索图标添加一个自选股后返回到自选股首页");
-        selfSelectionAction.enterIntoSearchStockViewOnSelectionView();
+        selfSelectionAction.enterIntoSearchStockViewOnEditSelfSelectionView();
         selfSelectionAction.typeTextOnSearchStockView("222");
         stocks.addAll(selfSelectionAction.addStocksOnSearchStockView(1));
         selfSelectionAction.back();

@@ -39,15 +39,15 @@ public class SelfSelectionAction extends BaseAction {
         this.sleep(Constant.SHORT_WAIT_TIME);
     }
 
-    public void enterIntoSearchStockViewOnEditSelectionView() {
+    public void enterIntoSearchStockViewOnSelfSelectionView() {
         super.createSessionAfterTimeout();
         this.getDzhAndroidDriver().findElementById("com.android.dazhihui:id/searchBtn").click();
         this.sleep(Constant.SHORT_WAIT_TIME);
     }
 
-    public void enterIntoSearchStockViewOnSelectionView() {
+    public void enterIntoSearchStockViewOnEditSelfSelectionView() {
         super.createSessionAfterTimeout();
-        this.getDzhAndroidDriver().findElementById("com.android.dazhihui:id/searchBtn").click();
+        this.getDzhAndroidDriver().findElementById("com.android.dazhihui:id/head_right").click();
         this.sleep(Constant.SHORT_WAIT_TIME);
     }
 
@@ -255,6 +255,9 @@ public class SelfSelectionAction extends BaseAction {
         boolean tag = false;
         for (MobileElement item : stocks ) {
             try{
+                if(tag){
+                    break;
+                }
                 item.findElementByName(selfStockName);
                 item.findElementByName("已加入");
                 tag = true;
