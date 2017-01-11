@@ -1,30 +1,41 @@
 package gw.com.cn.keyboard;
 
 import gw.com.cn.DZHAndroidDriver;
-
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.io.File;
-import java.io.IOException;
+import org.openqa.selenium.Rectangle;
 
 /**
  * Created by lusha on 2017/1/9.
  */
 public class Keyboard {
 
-    int heightOffset;
+    int width;
+    int height;
+    private  DZHAndroidDriver dzhAndroidDriver;
 
     public Keyboard(DZHAndroidDriver dzhAndroidDriver) {
-        String deviceBrand = (String) dzhAndroidDriver.getCapabilities().getCapability("deviceBrand");
-        String brandSeries = (String) dzhAndroidDriver.getCapabilities().getCapability("brandSeries");
-        String imagePath = "/picture" + File.separator + deviceBrand + File.separator +
-                brandSeries + File.separator + "keyboard" + File.separator + "keyboardLetter.png";
-        try {
-            Image image = ImageIO.read(this.getClass().getResource(imagePath));
-            int height = image.getHeight(null);
-            heightOffset = height / 2;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        this.dzhAndroidDriver = dzhAndroidDriver;
+        Rectangle rectangle = this.dzhAndroidDriver.findElementById("com.android.dazhihui:id/keyboard_view").getRect();
+        width = rectangle.getWidth();
+        height = rectangle.getHeight();
+    }
+
+    public void switchDigitKeyboard(){
+        this.dzhAndroidDriver.findElementById("com.android.dazhihui:id/keyboard_numeral").click();
+    }
+
+    public void switchLetterKeyboard(){
+        this.dzhAndroidDriver.findElementById("com.android.dazhihui:id/keyboard_letter").click();
+    }
+
+    public void switchSystemKeyboard(){
+        this.dzhAndroidDriver.findElementById("com.android.dazhihui:id/keyboard_chinese").click();
+    }
+
+    public void openSpeech(){
+        this.dzhAndroidDriver.findElementById("com.android.dazhihui:id/keyboard_speech").click();
+    }
+
+    public void closeKeyboard(){
+        this.dzhAndroidDriver.findElementById("com.android.dazhihui:id/keyboard_close").click();
     }
 }
