@@ -15,14 +15,9 @@ public class DZH_TestCase_SelfSelection_004 extends DZHBaseTestCase {
     public void setUp() {
         super.setUp();
         selfSelectionAction = new SelfSelectionAction("master");
+        LogUtil.getLogger().info("1：删除所以自选股");
         selfSelectionAction.skipAdv();
-        selfSelectionAction.enterIntoEditSelectionViewOnSelfSelectionView();
-        selfSelectionAction.deleteAllSelfSelectionOrLatestBrowseOnEditSelectionView(true);
-        selfSelectionAction.back();
-        selfSelectionAction.enterIntoEditSelectionViewOnSelfSelectionView();
-        selfSelectionAction.editLatestBrowseOnEditSelectionView();
-        selfSelectionAction.deleteAllSelfSelectionOrLatestBrowseOnEditSelectionView(true);
-        selfSelectionAction.back();
+        selfSelectionAction.deleteAllSelfStockAndLatestBrowse();
     }
 
     @Test(description = "自选股最新排序")
@@ -51,8 +46,6 @@ public class DZH_TestCase_SelfSelection_004 extends DZHBaseTestCase {
         super.tearDown();
         selfSelectionAction.cancelSortOnSelfSelectionView();
         selfSelectionAction.back();
-        selfSelectionAction.enterIntoEditSelectionViewOnSelfSelectionView();
-        selfSelectionAction.deleteAllSelfSelectionOrLatestBrowseOnEditSelectionView(true);
-        selfSelectionAction.back();
+        selfSelectionAction.deleteAllSelfStockAndLatestBrowse();
     }
 }

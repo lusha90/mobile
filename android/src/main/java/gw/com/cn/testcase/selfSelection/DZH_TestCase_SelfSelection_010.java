@@ -43,8 +43,6 @@ public class DZH_TestCase_SelfSelection_010 extends DZHBaseTestCase {
     @AfterMethod
     public void tearDown() {
         super.tearDown();
-        selfSelectionAction.enterIntoEditSelectionViewOnSelfSelectionView();
-        selfSelectionAction.deleteAllSelfSelectionOrLatestBrowseOnEditSelectionView(true);
-        selfSelectionAction.back();
+        selfSelectionAction.deleteAllSelfStockAndLatestBrowse();
     }
 }
