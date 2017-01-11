@@ -28,9 +28,24 @@ public class SelfSelectionAction extends BaseAction {
         checkPoint = new CheckPoint(this.getDzhAndroidDriver());
     }
 
-    public void session(){
+    public void session() {
         String sessionID = this.getDzhAndroidDriver().getSessionId().toString();
         Map<String, String> sessionMap = this.getDzhAndroidDriver().getSessionDetails();
+    }
+
+    public void deleteAllSelfStockAndLatestBrowse(){
+        try{
+            this.getDzhAndroidDriver().findElementById("com.android.dazhihui:id/home_self_stock_layout");
+            this.enterIntoEditSelectionViewOnSelfSelectionView();
+            this.deleteAllSelfSelectionOrLatestBrowseOnEditSelectionView(true);
+            this.back();
+            this.enterIntoEditSelectionViewOnSelfSelectionView();
+            this.editLatestBrowseOnEditSelectionView();
+            this.deleteAllSelfSelectionOrLatestBrowseOnEditSelectionView(true);
+            this.back();
+        }catch (NoSuchElementException e){
+            LogUtil.getLogger().info("已无自选股和最新浏览");
+        }
     }
 
     public void enterIntoEditSelectionViewOnSelfSelectionView() {
@@ -68,9 +83,9 @@ public class SelfSelectionAction extends BaseAction {
         super.createSessionAfterTimeout();
         this.getDzhAndroidDriver().findElementById("com.android.dazhihui:id/head_more").click();
         this.sleep(Constant.NORMAL_WAIT_TIME);
-        if(isSure){
+        if (isSure) {
             this.getDzhAndroidDriver().findElementById("android:id/button1").click();
-        }else{
+        } else {
             this.getDzhAndroidDriver().findElementById("android:id/button2").click();
         }
     }
@@ -85,7 +100,7 @@ public class SelfSelectionAction extends BaseAction {
         this.sleep(Constant.SHORT_WAIT_TIME);
     }
 
-    public String deleteSelfSelectionOrStockOnEditSelectionView(){
+    public String deleteSelfSelectionOrStockOnEditSelectionView() {
         super.createSessionAfterTimeout();
         String text = this.getDzhAndroidDriver().findElementById("com.android.dazhihui:id/dzh_delete_item_name").getText();
         this.getDzhAndroidDriver().findElementByName("删除").click();
@@ -94,11 +109,11 @@ public class SelfSelectionAction extends BaseAction {
         return text;
     }
 
-    public void selfStockOperatorOnSelectionView(String stockName, StockOperator stockOperator ){
+    public void selfStockOperatorOnSelectionView(String stockName, StockOperator stockOperator) {
         super.createSessionAfterTimeout();
         List<AndroidElement> stocks = this.getDzhAndroidDriver().findElementsById("com.android.dazhihui:id/tv_name");
         for (AndroidElement androidElement : stocks) {
-            if(androidElement.getText().equals(stockName)){
+            if (androidElement.getText().equals(stockName)) {
                 TouchAction touchAction = new TouchAction(this.getDzhAndroidDriver());
                 touchAction.longPress(androidElement).perform();
                 switch (stockOperator) {
@@ -111,6 +126,13 @@ public class SelfSelectionAction extends BaseAction {
                     case DEL:
                         this.getDzhAndroidDriver().findElementByName("删除").click();
                         this.getDzhAndroidDriver().findElementById("android:id/button1").click();
+                        try{
+                            this.getDzhAndroidDriver().findElementByName(stockName);
+                            LogUtil.getLogger().info(stockName + " 自选股删除失败");
+                            Assert.assertEquals(true, false, stockName + " 自选股删除失败");
+                        }catch (NoSuchElementException e){
+                            LogUtil.getLogger().info(stockName + " 自选股删除成功");
+                        }
                         return;
                     case TOP:
                         this.getDzhAndroidDriver().findElementByName("置顶").click();
@@ -120,153 +142,151 @@ public class SelfSelectionAction extends BaseAction {
         }
     }
 
-    public void dragSelfSelectionOnEditSelectionView(){
+    public void dragSelfSelectionOnEditSelectionView() {
         super.createSessionAfterTimeout();
         this.getDzhAndroidDriver().findElementByName("按住拖动").getRect();
         this.sleep(Constant.SHORT_WAIT_TIME);
     }
 
-    public List<String> addStocksOnSearchStockView(int number){
+    public List<String> addStocksOnSearchStockView(int number) {
         List<String> selfStocks = new ArrayList<String>();
-        List<AndroidElement> androidElements =  this.getDzhAndroidDriver().findElementsById("com.android.dazhihui:id/searchListStockName");
-        List<AndroidElement> androidElementIcons =  this.getDzhAndroidDriver().findElementsById("com.android.dazhihui:id/searchListAddIcon");
-        if(number > 0 && number < androidElements.size()){
+        List<AndroidElement> androidElements = this.getDzhAndroidDriver().findElementsById("com.android.dazhihui:id/searchListStockName");
+        List<AndroidElement> androidElementIcons = this.getDzhAndroidDriver().findElementsById("com.android.dazhihui:id/searchListAddIcon");
+        if (number > 0 && number < androidElements.size()) {
             for (int i = 0; i < number; i++) {
                 selfStocks.add(androidElements.get(i).getText());
                 androidElementIcons.get(0).click();
             }
-        }else{
+        } else {
             throw new RuntimeException("number error, number should in [" + 1 + "-" + androidElements.size() + "]");
         }
         return selfStocks;
     }
 
-    public void newestSortOnSelfSelectionView(boolean isDesc){
-        if(this.getDzhAndroidDriver().isContainImage("selfSelection/sortedDesc.png") || this.getDzhAndroidDriver().isContainImage("selfSelection/sortedAsc.png")){
+    public void newestSortOnSelfSelectionView(boolean isDesc) {
+        if (this.getDzhAndroidDriver().isContainImage("selfSelection/sortedDesc.png") || this.getDzhAndroidDriver().isContainImage("selfSelection/sortedAsc.png")) {
             this.cancelSortOnSelfSelectionView();
-        }else{
-            if(isDesc){
-                this.getDzhAndroidDriver().findElementById("com.android.dazhihui:id/zx_sort").click();
-            }else{
-                this.getDzhAndroidDriver().findElementById("com.android.dazhihui:id/zx_sort").click();
-                this.getDzhAndroidDriver().findElementById("com.android.dazhihui:id/zx_sort").click();
+        }
+        if (isDesc) {
+            this.getDzhAndroidDriver().findElementById("com.android.dazhihui:id/zx_sort").click();
+        } else {
+            this.getDzhAndroidDriver().findElementById("com.android.dazhihui:id/zx_sort").click();
+            this.getDzhAndroidDriver().findElementById("com.android.dazhihui:id/zx_sort").click();
 
-            }
         }
     }
 
-    public void  increaseSortOnSelfSelectionView(boolean isDesc){
-        if(this.getDzhAndroidDriver().isContainImage("selfSelection/sortedDesc.png") || this.getDzhAndroidDriver().isContainImage("selfSelection/sortedAsc.png")){
+    public void increaseSortOnSelfSelectionView(boolean isDesc) {
+        if (this.getDzhAndroidDriver().isContainImage("selfSelection/sortedDesc.png") || this.getDzhAndroidDriver().isContainImage("selfSelection/sortedAsc.png")) {
             this.cancelSortOnSelfSelectionView();
-        }else{
-            if(isDesc){
-                this.getDzhAndroidDriver().findElementById("com.android.dazhihui:id/zf_sort").click();
-            }else{
-                this.getDzhAndroidDriver().findElementById("com.android.dazhihui:id/zf_sort").click();
-                this.getDzhAndroidDriver().findElementById("com.android.dazhihui:id/zf_sort").click();
+        }
+        if (isDesc) {
+            this.getDzhAndroidDriver().findElementById("com.android.dazhihui:id/zf_sort").click();
+        } else {
+            this.getDzhAndroidDriver().findElementById("com.android.dazhihui:id/zf_sort").click();
+            this.getDzhAndroidDriver().findElementById("com.android.dazhihui:id/zf_sort").click();
 
-            }
         }
     }
 
-    public void cancelSortOnSelfSelectionView(){
+    public void cancelSortOnSelfSelectionView() {
         this.getDzhAndroidDriver().findElementById("com.android.dazhihui:id/cancel_sort_text").click();
     }
 
-    public void checkAddOrderOfSelfStocks(List<String> originOrder){
+    public void checkAddOrderOfSelfStocks(List<String> originOrder) {
         List<AndroidElement> selfList = this.getDzhAndroidDriver().findElementsById("com.android.dazhihui:id/tv_name");
         List<String> nowOrder = new ArrayList<String>();
-        for (AndroidElement item : selfList ) {
+        for (AndroidElement item : selfList) {
             nowOrder.add(item.getText());
         }
         Collections.reverse(nowOrder);
-        LogUtil.getLogger().info("expect: " + originOrder.toString()  + " actual:" + nowOrder.toString() + "自选列表下的自选股恢复为添加顺序");
-        Assert.assertEquals(originOrder.toString(), nowOrder.toString() , "自选列表下的自选股恢复为添加顺序");
+        LogUtil.getLogger().info("expect: " + originOrder.toString() + " actual:" + nowOrder.toString() + "自选列表下的自选股恢复为添加顺序");
+        Assert.assertEquals(originOrder.toString(), nowOrder.toString(), "自选列表下的自选股恢复为添加顺序");
     }
 
-    public void checkNewestSortOnSelfSelectionView(boolean isDesc){
+    public void checkNewestSortOnSelfSelectionView(boolean isDesc) {
         List<AndroidElement> selfList = this.getDzhAndroidDriver().findElementsById("com.android.dazhihui:id/tv_zxj");
         List<Double> unSort = new ArrayList<Double>();
-        for (AndroidElement item : selfList ) {
+        for (AndroidElement item : selfList) {
             String text = item.getText();
-            if(text.equals("--")){
+            if (text.equals("--")) {
                 text = "0.00";
             }
             Double stockPrice = Double.parseDouble(text);
             unSort.add(stockPrice);
         }
-        if(isDesc){
+        if (isDesc) {
             String actual = unSort.toString();
             Collections.sort(unSort);
             Collections.reverse(unSort);
             String expect = unSort.toString();
-            LogUtil.getLogger().info("expect: " + expect  + " actual:" + actual + "检查最新降序排序是否正确");
-            Assert.assertEquals(actual, expect , "检查最新降序排序是否正确");
-        }else{
+            LogUtil.getLogger().info("expect: " + expect + " actual:" + actual + "检查最新降序排序是否正确");
+            Assert.assertEquals(actual, expect, "检查最新降序排序是否正确");
+        } else {
             String actual = unSort.toString();
             Collections.sort(unSort);
             String expect = unSort.toString();
-            LogUtil.getLogger().info("expect: " + expect  + " actual:" + actual + "检查最新升序排序是否正确");
-            Assert.assertEquals(actual, expect , "检查最新升序排序是否正确");
+            LogUtil.getLogger().info("expect: " + expect + " actual:" + actual + "检查最新升序排序是否正确");
+            Assert.assertEquals(actual, expect, "检查最新升序排序是否正确");
         }
 
     }
 
-    public void checkIncreaseSortOnSelfSelectionView(boolean isDesc){
+    public void checkIncreaseSortOnSelfSelectionView(boolean isDesc) {
         List<AndroidElement> selfList = this.getDzhAndroidDriver().findElementsById("com.android.dazhihui:id/tv_zf");
         List<Double> unSort = new ArrayList<Double>();
-        for (AndroidElement item : selfList ) {
+        for (AndroidElement item : selfList) {
             String text = item.getText();
             text = text.replace("%", "").replace("+", "");
-            if(text.equals("--")){
+            if (text.equals("--")) {
                 text = "0.00";
             }
             Double stockIncrease = Double.parseDouble(text);
             unSort.add(stockIncrease);
         }
-        if(isDesc){
+        if (isDesc) {
             String actual = unSort.toString();
             Collections.sort(unSort);
             Collections.reverse(unSort);
             String expect = unSort.toString();
-            LogUtil.getLogger().info("expect: " + expect  + " actual:" + actual + "检查涨幅降序排序是否正确");
-            Assert.assertEquals(actual, expect , "检查涨幅降序排序是否正确");
-        }else{
+            LogUtil.getLogger().info("expect: " + expect + " actual:" + actual + "检查涨幅降序排序是否正确");
+            Assert.assertEquals(actual, expect, "检查涨幅降序排序是否正确");
+        } else {
             String actual = unSort.toString();
             Collections.sort(unSort);
             String expect = unSort.toString();
-            LogUtil.getLogger().info("expect: " + expect  + " actual:" + actual + "检查涨幅升序排序是否正确");
-            Assert.assertEquals(actual, expect , "检查涨幅升序排序是否正确");
+            LogUtil.getLogger().info("expect: " + expect + " actual:" + actual + "检查涨幅升序排序是否正确");
+            Assert.assertEquals(actual, expect, "检查涨幅升序排序是否正确");
         }
 
     }
 
-    public void checkNoExistSelfStockOnEditSelectionView(){
+    public void checkNoExistSelfStockOnEditSelectionView() {
         this.checkPoint.checkIDNotExist("com.android.dazhihui:id/dzh_delete_item_name");
     }
 
-    public void checkNoExistSpecialSelfStockOnEditSelectionViewOrSelectionView(String selfStockName){
+    public void checkNoExistSpecialSelfStockOnEditSelectionViewOrSelectionView(String selfStockName) {
         this.checkPoint.checkTextNotExist(selfStockName);
     }
 
-    public void checkStockIsSelfOnSearchStockView(String selfStockName){
+    public void checkStockIsSelfOnSearchStockView(String selfStockName) {
         AndroidElement listView = (AndroidElement) this.getDzhAndroidDriver().findElementById("com.android.dazhihui:id/searchstock_listview");
         List<MobileElement> stocks = listView.findElementsByClassName("android.widget.LinearLayout");
         boolean tag = false;
-        for (MobileElement item : stocks ) {
-            try{
-                if(tag){
+        for (MobileElement item : stocks) {
+            try {
+                if (tag) {
                     break;
                 }
                 item.findElementByName(selfStockName);
                 item.findElementByName("已加入");
                 tag = true;
-            }catch (NoSuchElementException e){
+            } catch (NoSuchElementException e) {
                 LogUtil.getLogger().debug(selfStockName + " not found in current view");
             }
         }
         LogUtil.getLogger().info("检查" + selfStockName + "是否为自选股");
-        Assert.assertEquals(true, tag , selfStockName + " is a self stock");
+        Assert.assertEquals(true, tag, selfStockName + " is a self stock");
     }
 
 }

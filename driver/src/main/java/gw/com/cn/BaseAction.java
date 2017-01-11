@@ -66,14 +66,14 @@ public class BaseAction {
         this.waitForAdvEnd();
     }
 
-    private void waitForAdvEnd(){
+    private void waitForAdvEnd() {
         int count = 1;
-        while (true){
+        while (true) {
             try {
                 this.getDzhAndroidDriver().findElementById("com.android.dazhihui:id/bottom_menu_button_1");
                 break;
-            }catch (NoSuchElementException e){
-                LogUtil.getLogger().info("*************** 第" + count + "次等待开机广告结束 ***************");
+            } catch (NoSuchElementException e) {
+                LogUtil.getLogger().info("第" + count + "次等待开机广告结束");
                 count++;
                 this.sleep(1);
             }
@@ -98,7 +98,7 @@ public class BaseAction {
         dzhAndroidDriver.startActivity("com.android.dazhihui", "com.android.dazhihui.dzh.dzh");
     }
 
-    public  void back(){
+    public void back() {
         this.createSessionAfterTimeout();
         dzhAndroidDriver.pressKeyCode(AndroidKeyCode.BACK);
         this.sleep(1);
@@ -136,11 +136,8 @@ public class BaseAction {
     public void skipAdv() {
         this.createSessionAfterTimeout();
         this.getDzhAndroidDriver().findElementByName("自选").click();
-        this.sleep(2);
         this.getDzhAndroidDriver().findElementByName("自选").click();
-        this.sleep(2);
         this.getDzhAndroidDriver().findElementByName("自选").click();
-        this.sleep(2);
     }
 
     public int getScreenDensity() {
@@ -172,13 +169,22 @@ public class BaseAction {
                     dzhLetterKeyboard.switchLetterKeyboard();
                     MethodUtils.invokeExactMethod(dzhLetterKeyboard, "tap_" + symbol);
                 }
-                this.sleep(3);
             } catch (NoSuchMethodException e) {
                 e.printStackTrace();
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             } catch (InvocationTargetException e) {
                 e.printStackTrace();
+            }
+        }
+        int retry = 10;
+        for (int i = 1; i < retry; i++) {
+            try {
+                LogUtil.getLogger().info("第" + i + "次等待搜索列表下出现股票");
+                this.getDzhAndroidDriver().findElementById("com.android.dazhihui:id/searchListStockCode");
+                break;
+            } catch (NoSuchElementException e) {
+                this.sleep(1);
             }
         }
     }

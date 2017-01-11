@@ -17,14 +17,9 @@ public class DZH_TestCase_SelfSelection_010 extends DZHBaseTestCase {
     public void setUp() {
         super.setUp();
         selfSelectionAction = new SelfSelectionAction("master");
+        LogUtil.getLogger().info("1：删除所以自选股");
         selfSelectionAction.skipAdv();
-        selfSelectionAction.enterIntoEditSelectionViewOnSelfSelectionView();
-        selfSelectionAction.deleteAllSelfSelectionOrLatestBrowseOnEditSelectionView(true);
-        selfSelectionAction.back();
-        selfSelectionAction.enterIntoEditSelectionViewOnSelfSelectionView();
-        selfSelectionAction.editLatestBrowseOnEditSelectionView();
-        selfSelectionAction.deleteAllSelfSelectionOrLatestBrowseOnEditSelectionView(true);
-        selfSelectionAction.back();
+        selfSelectionAction.deleteAllSelfStockAndLatestBrowse();
     }
     @Test(description = "自选股页面删除自选股")
     public void testStep() {
@@ -39,6 +34,7 @@ public class DZH_TestCase_SelfSelection_010 extends DZHBaseTestCase {
         LogUtil.getLogger().info("5：返回到自选股页面");
         selfSelectionAction.back();
         selfSelectionAction.back();
+        LogUtil.getLogger().info("6：删除一个自选股");
         selfSelectionAction.selfStockOperatorOnSelectionView(stocks.get(0),
                 SelfSelectionAction.StockOperator.DEL);
         selfSelectionAction.checkNoExistSpecialSelfStockOnEditSelectionViewOrSelectionView(
