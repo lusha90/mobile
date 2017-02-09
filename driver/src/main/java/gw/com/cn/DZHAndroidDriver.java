@@ -3,6 +3,7 @@ package gw.com.cn;
 import gw.com.cn.util.Adb;
 import gw.com.cn.util.ImageContainUtil;
 import gw.com.cn.util.ImageUtil;
+import gw.com.cn.util.LogUtil;
 import io.appium.java_client.TouchShortcuts;
 import io.appium.java_client.android.*;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
@@ -132,6 +133,7 @@ public class DZHAndroidDriver extends AndroidDriver {
      */
     @Override
     public void swipe(int startx, int starty, int endx, int endy, int duration) {
+        LogUtil.getLogger().debug("滑动坐标: [" + startx + "," + starty + "]" + " [" + endx + "," + endy + "]");
         super.swipe(startx, starty, endx, endy, duration);
     }
 

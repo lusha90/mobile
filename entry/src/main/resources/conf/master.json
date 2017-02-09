@@ -6,6 +6,8 @@
   "appPath": "C:\\dzh.apk",
   "downloadAppFromServer": false,
   "replaceExistingApp" : false,
+  "testdataPath" : "D:\\Program Files\\Tesseract-OCR\\tessdata",
+  "menuConf" : "http://mnews.gw.com.cn/wap/data/mobileconfig/sc850.json",
   "devices": [
     {
       "deviceBrand": "google",

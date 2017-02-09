@@ -29,16 +29,18 @@ public class DZHRunner {
     public static final String DZH_SCREENSHOT = "screenshot";
 
 
-    private static DZHInfo fillDZHInfo(File jsonFile){
+    private static DZHInfo fillDZHInfo(File jsonFile) {
         JSONObject jSONObject = JsonUtil.readJson(jsonFile);
         DZHInfo dzhInfo = new DZHInfo();
         dzhInfo.setAddress(jSONObject.has("address") ? (String) jSONObject.get("address") : dzhInfo.getAddress());
         dzhInfo.setFtpPath(jSONObject.has("ftpPath") ? (String) jSONObject.get("ftpPath") : dzhInfo.getFtpPath());
         dzhInfo.setPort(jSONObject.has("port") ? (String) jSONObject.get("port") : dzhInfo.getPort());
         dzhInfo.setSdkPath(jSONObject.has("sdkPath") ? (String) jSONObject.get("sdkPath") : dzhInfo.getSdkPath());
+        dzhInfo.setMenuConf(jSONObject.has("menuConf") ? (String) jSONObject.get("menuConf") : dzhInfo.getMenuConf());
+        dzhInfo.setTestdataPath(jSONObject.has("testdataPath") ? (String) jSONObject.get("testdataPath") : dzhInfo.getTestdataPath());
         dzhInfo.setDownloadAppFromServer(jSONObject.has("downloadAppFromServer") ? (Boolean) jSONObject.get("downloadAppFromServer") : dzhInfo.isDownloadAppFromServer());
         dzhInfo.setReplaceExistingApp(jSONObject.has("replaceExistingApp") ? (Boolean) jSONObject.get("replaceExistingApp") : dzhInfo.isReplaceExistingApp());
-        if(dzhInfo.isReplaceExistingApp() && !dzhInfo.isDownloadAppFromServer()){
+        if (dzhInfo.isReplaceExistingApp() && !dzhInfo.isDownloadAppFromServer()) {
             dzhInfo.setAppPath(jSONObject.has("appPath") ? (String) jSONObject.get("appPath") : dzhInfo.getAppPath());
         }
         JSONArray jSONArray = jSONObject.getJSONArray("devices");
@@ -62,12 +64,12 @@ public class DZHRunner {
         return dzhInfo;
     }
 
-    private static DZHInfo fillDZHInfo(String jsonFilePath){
+    private static DZHInfo fillDZHInfo(String jsonFilePath) {
         File file = new File(jsonFilePath);
         return fillDZHInfo(file);
     }
 
-    private void loadConfFromClassPath(){
+    private void loadConfFromClassPath() {
         InputStream inputStream = this.getClass().getResourceAsStream("/caseConf/allCases.xml");
         InputStream inputStreamJson = this.getClass().getResourceAsStream("/conf/master.json");
         String jsonStr = null;
@@ -78,12 +80,12 @@ public class DZHRunner {
         }
     }
 
-    private static DZHInfo loadConf(String jsonFilePath){
+    private static DZHInfo loadConf(String jsonFilePath) {
         File currentPath = new File("");
         jsonFilePath = currentPath.getAbsolutePath() + jsonFilePath;
         LogUtil.getLogger().info("loading json : " + jsonFilePath);
         DZHInfo dzhInfo = fillDZHInfo(jsonFilePath);
-        if(dzhInfo.isDownloadAppFromServer()){
+        if (dzhInfo.isDownloadAppFromServer()) {
             LogUtil.getLogger().info("download newest app from ftp server : " + dzhInfo.getFtpPath());
             FtpUtil ftpUtil = new FtpUtil(dzhInfo.getFtpPath());
             try {
@@ -97,7 +99,7 @@ public class DZHRunner {
         return dzhInfo;
     }
 
-    public static void runDZHCases(String jsonFilePath, String testngXmlPath){
+    public static void runDZHCases(String jsonFilePath, String testngXmlPath) {
         BaseAction.dzhInfo = loadConf(jsonFilePath);
         File currentPath = new File("");
         testngXmlPath = currentPath.getAbsolutePath() + testngXmlPath;
@@ -113,13 +115,13 @@ public class DZHRunner {
         System.exit(testng.getStatus());
     }
 
-    public static void runDZHCases(File jsonFile, File testngXmlFile){
+    public static void runDZHCases(File jsonFile, File testngXmlFile) {
         DZHInfo dzhInfo = fillDZHInfo(jsonFile.getAbsolutePath());
         BaseAction.dzhInfo = dzhInfo;
         TestNG.main(new String[]{testngXmlFile.getAbsolutePath()});
     }
 
-    private static void cleanLogAndReport(){
+    private static void cleanLogAndReport() {
         String reportPath = new File(".").getAbsolutePath() + File.separator + DZH_REPORT;
         String logPath = new File(".").getAbsolutePath() + File.separator + DZH_LOG;
         FileUtils.deleteQuietly(new File(reportPath));
@@ -127,7 +129,7 @@ public class DZHRunner {
     }
 
     public static void main(String[] args) {
-        if(args.length < 2){
+        if (args.length < 2) {
             throw new RuntimeException("args error");
         }
         cleanLogAndReport();

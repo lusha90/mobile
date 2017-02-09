@@ -21,7 +21,27 @@ public class DZHInfo {
 
     private String appPath;
 
+    private String menuConf = "http://mnews.gw.com.cn/wap/data/mobileconfig/sc850.json";
+
+    private String testdataPath = "D:\\Program Files\\Tesseract-OCR\\tessdata";
+
+    public String getTestdataPath() {
+        return testdataPath;
+    }
+
+    public void setTestdataPath(String testdataPath) {
+        this.testdataPath = testdataPath;
+    }
+
     private List<DeviceInfo> devicesInfo;
+
+    public String getMenuConf() {
+        return menuConf;
+    }
+
+    public void setMenuConf(String menuConf) {
+        this.menuConf = menuConf;
+    }
 
     public String getAddress() {
         return address;

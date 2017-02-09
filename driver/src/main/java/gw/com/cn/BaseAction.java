@@ -4,9 +4,14 @@ import gw.com.cn.keyboard.DzhDigitKeyboard;
 import gw.com.cn.keyboard.DzhLetterKeyboard;
 import gw.com.cn.util.Adb;
 import gw.com.cn.util.LogUtil;
+import gw.com.cn.wait.AndroidDriverWait;
+import gw.com.cn.wait.MobileExpectedCondition;
+import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.android.AndroidElement;
 import io.appium.java_client.android.AndroidKeyCode;
 import org.apache.commons.lang3.CharUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
+import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
@@ -27,6 +32,10 @@ public class BaseAction {
 
     private Adb adb;
 
+    public int width;
+
+    public int height;
+
     public void initDZHInfo(DZHInfo dzhInfo_) {
         if (dzhInfo == null && dzhInfo_ != null) {
             dzhInfo = dzhInfo_;
@@ -37,6 +46,7 @@ public class BaseAction {
         DesiredCapabilities capabilities = new DesiredCapabilities();
         if (dzhInfo.isReplaceExistingApp()) {
             capabilities.setCapability("app", dzhInfo.getAppPath());
+            capabilities.setCapability("testdataPath", dzhInfo.getTestdataPath());
         }
         List<DeviceInfo> devices = dzhInfo.getDevicesInfo();
         for (DeviceInfo device : devices) {
@@ -84,6 +94,8 @@ public class BaseAction {
         if (this.getDzhAndroidDriver() == null) {
             this.createDZHAndroidDriver(deviceType);
         }
+        width = this.getDzhAndroidDriver().manage().window().getSize().width;
+        height = this.getDzhAndroidDriver().manage().window().getSize().height;
     }
 
     public DZHAndroidDriver getDzhAndroidDriver() {
@@ -127,6 +139,24 @@ public class BaseAction {
     public void implicitlySleep(int sleepTime) {
         this.createSessionAfterTimeout();
         this.getDzhAndroidDriver().manage().timeouts().implicitlyWait(sleepTime, TimeUnit.SECONDS);
+    }
+
+    public void explicitSleepForID(final String id, int sleepTime) {
+        AndroidElement androidElement = new AndroidDriverWait(this.getDzhAndroidDriver(), sleepTime)
+                .until(new MobileExpectedCondition<AndroidElement>() {
+                    public AndroidElement apply(AndroidDriver androidDriver) {
+                        return (AndroidElement) androidDriver.findElement(By.id(id));
+                    }
+                });
+    }
+
+    public void explicitSleepForText(final String name, int sleepTime) {
+        AndroidElement androidElement = new AndroidDriverWait(this.getDzhAndroidDriver(), sleepTime)
+                .until(new MobileExpectedCondition<AndroidElement>() {
+                    public AndroidElement apply(AndroidDriver androidDriver) {
+                        return (AndroidElement) androidDriver.findElement(By.name(name));
+                    }
+                });
     }
 
     public void currentActivity() {
@@ -187,6 +217,22 @@ public class BaseAction {
                 this.sleep(1);
             }
         }
+    }
+
+    public void swipeToUp(int during) {
+        this.getDzhAndroidDriver().swipe(width / 2, height * 9 / 10, width / 2, height / 4, during);
+    }
+
+    public void swipeToDown(int during) {
+        this.getDzhAndroidDriver().swipe(width / 2, height / 4, width / 2, height * 9 / 10, during);
+    }
+
+    public void swipeToLeft(int during) {
+        this.getDzhAndroidDriver().swipe(width * 9 / 10, height / 2, width / 10, height / 2, during);
+    }
+
+    public void swipeToRight(int during) {
+        this.getDzhAndroidDriver().swipe(width / 10, height / 2, width * 9 / 10, height / 2, during);
     }
 
 }

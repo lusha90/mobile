@@ -127,8 +127,12 @@ public class ImageContainUtil {
 
     public boolean isFind() {
         boolean tag = false;
-        if (this.resultRGBData[0][0][0] != 0 && this.resultRGBData[0][0][1] != 0
-                && this.resultRGBData[heightTarget - 1][widthTarget - 1][0] != 0
+//        if (this.resultRGBData[0][0][0] != 0 && this.resultRGBData[0][0][1] != 0
+//                && this.resultRGBData[heightTarget - 1][widthTarget - 1][0] != 0
+//                && this.resultRGBData[heightTarget - 1][widthTarget - 1][1] != 0) {
+//            tag = true;
+//        }
+        if (this.resultRGBData[heightTarget - 1][widthTarget - 1][0] != 0
                 && this.resultRGBData[heightTarget - 1][widthTarget - 1][1] != 0) {
             tag = true;
         }
@@ -136,8 +140,8 @@ public class ImageContainUtil {
     }
 
     public static void main(String[] args) {
-        ImageContainUtil iu = new ImageContainUtil("E:\\a.png",
-                "E:\\b.png");
+        ImageContainUtil iu = new ImageContainUtil("E:\\test\\a.png",
+                "E:\\test\\b.png");
         iu.findImage();
         iu.showResult();
         iu.saveFindImage("E:\\cut.png", "png");
