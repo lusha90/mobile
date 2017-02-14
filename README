@@ -2,3 +2,7 @@ tesseract安装包
 https://github.com/UB-Mannheim/tesseract/wiki
 tesseract源代码
 https://github.com/tesseract-ocr/tesseract
+sigar
+https://sourceforge.net/projects/sigar/
+window查看进程命令行参数(其中update.exe可以换成你要查看的进程)
+wmic process where caption="update.exe" get caption,commandline /value

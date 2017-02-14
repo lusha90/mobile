@@ -14,7 +14,7 @@ public class DzhStart {
 
     @Test
     public void testOne(){
-        DZHRunner.runDZHCases("\\src\\main\\resources\\conf\\master.json", "\\src\\main\\resources\\caseConf\\allCases.xml");
+        DZHRunner.runDZHCases("\\src\\main\\resources\\conf\\oppo.json", "\\src\\main\\resources\\caseConf\\allCases.xml");
     }
 
     @Test

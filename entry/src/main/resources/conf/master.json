@@ -19,19 +19,21 @@
       "automationName": "Appium",
       "sessionTimeout": "120",
       "language": "zh_CN",
-      "locale": "CN"
+      "locale": "CN",
+      "updateTip": false
     },
     {
-      "deviceBrand": "meizu",
-      "brandSeries": "note1",
+      "deviceBrand": "oppo",
+      "brandSeries": "r9",
       "deviceType": "slave",
-      "deviceName": "304d1165ec0baf8f",
+      "deviceName": "OR6HBQOF99999999",
       "platformName": "Android",
       "platformVersion": "23",
       "automationName": "Appium",
       "sessionTimeout": "120",
       "language": "zh_CN",
-      "locale": "CN"
+      "locale": "CN",
+      "updateTip": true
     }
   ]
 }

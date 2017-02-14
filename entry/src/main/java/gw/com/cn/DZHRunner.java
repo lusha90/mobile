@@ -57,6 +57,7 @@ public class DZHRunner {
             deviceInfo.setDeviceName(deviceJSONObject.has("deviceName") ? (String) deviceJSONObject.get("deviceName") : deviceInfo.getDeviceName());
             deviceInfo.setLanguage(deviceJSONObject.has("language") ? (String) deviceJSONObject.get("language") : deviceInfo.getLanguage());
             deviceInfo.setLocale(deviceJSONObject.has("locale") ? (String) deviceJSONObject.get("locale") : deviceInfo.getLocale());
+            deviceInfo.setUpdateTip(deviceJSONObject.has("updateTip") ? (Boolean) deviceJSONObject.get("updateTip") : deviceInfo.isUpdateTip());
             deviceInfo.setSessionTimeout(deviceJSONObject.has("sessionTimeout") ? (String) deviceJSONObject.get("sessionTimeout") : deviceInfo.getSessionTimeout());
             devicesList.add(deviceInfo);
         }

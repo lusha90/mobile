@@ -133,7 +133,7 @@ public class DZHAndroidDriver extends AndroidDriver {
      */
     @Override
     public void swipe(int startx, int starty, int endx, int endy, int duration) {
-        LogUtil.getLogger().debug("滑动坐标: [" + startx + "," + starty + "]" + " [" + endx + "," + endy + "]");
+        LogUtil.getLogger().info("滑动坐标: [" + startx + "," + starty + "]" + " [" + endx + "," + endy + "]");
         super.swipe(startx, starty, endx, endy, duration);
     }
 

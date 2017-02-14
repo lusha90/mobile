@@ -14,7 +14,7 @@ public class Adb {
     private String adbShellCmd = null;
 
     public Adb(String sdkPath, String deviceName) {
-        this.adbCmd = sdkPath + this.adbCmd + " -s " + deviceName;
+        this.adbCmd = sdkPath + File.separator +  this.adbCmd + " -s " + deviceName;
         this.adbShellCmd = this.adbCmd + " shell ";
     }
 
@@ -103,6 +103,42 @@ public class Adb {
             }
         }
         return density;
+    }
+
+    public String screenRecord(String videoPath, int timeLimit){
+        //--size 1280x720
+        //String endChar = " &\"";
+        String endChar = "";
+        String cmd = this.adbShellCmd + "\"screenrecord --verbose --bugreport --time-limit "  + timeLimit + " " + videoPath + endChar;
+        File file = this.executeAdbCmd(cmd);
+        try {
+            LogUtil.getLogger().info(FileUtils.readFileToString(file, "utf-8"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return videoPath;
+    }
+
+    public void killProcess(String phoneBrand, String processName){
+        String cmd = "";
+        if(phoneBrand.equals("oppo")){
+            cmd = this.adbShellCmd + "\"ps|busybox grep " + processName + "\"";
+        }else if(phoneBrand.equals("google")){
+            cmd = this.adbShellCmd + "\"ps|grep " + processName + "\"";
+        }
+        File file = this.executeAdbCmd(cmd);
+        try {
+            List<String> process = FileUtils.readLines(file, "utf-8");
+            for (String str : process) {
+                LogUtil.getLogger().info(str);
+                String[] array = str.split("\\s+");
+                if(array.length > 2){
+                    this.executeAdbCmd(this.adbShellCmd + "\"kill -6 " + array[1] + "\"");
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void adbShell(){

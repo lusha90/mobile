@@ -24,6 +24,25 @@ public class CustomListener extends TestListenerAdapter{
         }
     }
 
+    private void getScreenshootAndLogcat(ITestResult tr){
+        String dzhReportBase = new File(".").getAbsolutePath() + File.separator + "dzhReport";
+        String storeFailedCasesScreenshot = dzhReportBase + File.separator + "screenshot";
+        String storeFailedCasesLogcat = dzhReportBase + File.separator + "logcat";
+        String fullClassPath = tr.getInstanceName();
+        String classMethod = tr.getName();
+//            String str = storeFailedCasesScreenshot + File.separator + "screenshot" + File.separator +
+//                    fullClassPath.replace(".", File.separator)  + File.separator + classMethod;
+        String screenshotStr = storeFailedCasesScreenshot + File.separator + fullClassPath + "." + classMethod;
+        String logcatStr = storeFailedCasesLogcat + File.separator + fullClassPath + "." + classMethod;
+        File screenshotFile = new File(screenshotStr);
+        screenshotFile.mkdirs();
+        String savePath = adb.adbScreenshot("/sdcard/fail.png");
+        adb.adbPull(savePath, screenshotFile.getAbsolutePath());
+        File logcatFile = new File(logcatStr);
+        logcatFile.mkdirs();
+        adb.adbGetLogcat(logcatFile.getAbsolutePath() + File.separator + "logcat.txt");
+    }
+
     @Override
     public void onStart(ITestContext testContext) {
         this.init();
@@ -56,23 +75,7 @@ public class CustomListener extends TestListenerAdapter{
             LogUtil.getLogger().error(stackTraceElement.toString());
         }
         if(adb != null){
-            String dzhReportBase = new File(".").getAbsolutePath() + File.separator + "dzhReport";
-            String storeFailedCasesScreenshot = dzhReportBase + File.separator + "screenshot";
-            String storeFailedCasesLogcat = dzhReportBase + File.separator + "logcat";
-            String fullClassPath = tr.getInstanceName();
-            String classMethod = tr.getName();
-//            String str = storeFailedCasesScreenshot + File.separator + "screenshot" + File.separator +
-//                    fullClassPath.replace(".", File.separator)  + File.separator + classMethod;
-            String screenshotStr = storeFailedCasesScreenshot + File.separator + fullClassPath + "." + classMethod;
-            String logcatStr = storeFailedCasesLogcat + File.separator + fullClassPath + "." + classMethod;
-            File screenshotFile = new File(screenshotStr);
-            screenshotFile.mkdirs();
-            String savePath = adb.adbScreenshot("/sdcard/fail.png");
-            adb.adbPull(savePath, screenshotFile.getAbsolutePath());
-            File logcatFile = new File(logcatStr);
-            logcatFile.mkdirs();
-            adb.adbGetLogcat(logcatFile.getAbsolutePath() + File.separator + "logcat.txt");
-
+            this.getScreenshootAndLogcat(tr);
         }
         super.onTestFailure(tr);
     }
@@ -92,6 +95,9 @@ public class CustomListener extends TestListenerAdapter{
         StackTraceElement[] stack = itr.getThrowable().getStackTrace();
         for (StackTraceElement stackTraceElement : stack) {
             LogUtil.getLogger().error(stackTraceElement.toString());
+        }
+        if(adb != null){
+            this.getScreenshootAndLogcat(itr);
         }
         super.onConfigurationFailure(itr);
     }

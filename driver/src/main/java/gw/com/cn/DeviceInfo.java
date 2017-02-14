@@ -25,6 +25,16 @@ public class DeviceInfo {
 
     private String sessionTimeout = "60";
 
+    private boolean updateTip = false;
+
+    public boolean isUpdateTip() {
+        return updateTip;
+    }
+
+    public void setUpdateTip(boolean updateTip) {
+        this.updateTip = updateTip;
+    }
+
     public String getDeviceBrand() {
         return deviceBrand;
     }

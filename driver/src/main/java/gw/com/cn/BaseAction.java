@@ -9,16 +9,24 @@ import gw.com.cn.wait.MobileExpectedCondition;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.AndroidElement;
 import io.appium.java_client.android.AndroidKeyCode;
+import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang3.CharUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
+import org.hyperic.sigar.Sigar;
+import org.hyperic.sigar.SigarException;
+import org.hyperic.sigar.ptql.ProcessFinder;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
+import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -30,7 +38,7 @@ public class BaseAction {
 
     private static DZHAndroidDriver dzhAndroidDriver;
 
-    private Adb adb;
+    public static Adb adb;
 
     public int width;
 
@@ -51,7 +59,7 @@ public class BaseAction {
         List<DeviceInfo> devices = dzhInfo.getDevicesInfo();
         for (DeviceInfo device : devices) {
             if (device.getDeviceType().equals(deviceType)) {
-                adb = new Adb(dzhInfo.getSdkPath(), device.getDeviceName());
+                adb = new Adb(dzhInfo.getSdkPath() + File.separator + "platform-tools" + File.separator, device.getDeviceName());
                 capabilities.setCapability("deviceName", device.getDeviceName());
                 capabilities.setCapability("deviceBrand", device.getDeviceBrand());
                 capabilities.setCapability("brandSeries", device.getBrandSeries());
@@ -63,6 +71,7 @@ public class BaseAction {
                 capabilities.setCapability("appPackage", "com.android.dazhihui");
                 capabilities.setCapability("appActivity", "com.android.dazhihui.dzh.dzh");
                 capabilities.setCapability("newCommandTimeout", device.getSessionTimeout());
+                capabilities.setCapability("updateTip", device.isUpdateTip());
                 break;
             }
         }
@@ -73,7 +82,22 @@ public class BaseAction {
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-        this.waitForAdvEnd();
+        if(Boolean.parseBoolean(capabilities.getCapability("updateTip").toString())){
+            this.waitForAdvEndWithUpdateTip();
+        }else{
+            this.waitForAdvEnd();
+        }
+    }
+
+    private boolean isShowUpdateTip(){
+        boolean tag = true;
+        this.createSessionAfterTimeout();
+        try{
+            this.getDzhAndroidDriver().findElementByName("下次再说");
+        }catch (NoSuchElementException e){
+            tag = false;
+        }
+        return tag;
     }
 
     private void waitForAdvEnd() {
@@ -81,6 +105,20 @@ public class BaseAction {
         while (true) {
             try {
                 this.getDzhAndroidDriver().findElementById("com.android.dazhihui:id/bottom_menu_button_1");
+                break;
+            } catch (NoSuchElementException e) {
+                LogUtil.getLogger().info("第" + count + "次等待开机广告结束");
+                count++;
+                this.sleep(1);
+            }
+        }
+    }
+
+    private void waitForAdvEndWithUpdateTip() {
+        int count = 1;
+        while (true) {
+            try {
+                this.getDzhAndroidDriver().findElementByName("下次再说").click();
                 break;
             } catch (NoSuchElementException e) {
                 LogUtil.getLogger().info("第" + count + "次等待开机广告结束");
@@ -215,6 +253,9 @@ public class BaseAction {
                 break;
             } catch (NoSuchElementException e) {
                 this.sleep(1);
+                dzhDigitKeyboard.switchDigitKeyboard();
+                dzhDigitKeyboard.tap_search();
+                this.sleep(2);
             }
         }
     }
@@ -233,6 +274,71 @@ public class BaseAction {
 
     public void swipeToRight(int during) {
         this.getDzhAndroidDriver().swipe(width / 10, height / 2, width * 9 / 10, height / 2, during);
+    }
+
+    public File getScreenshotPath(Class testcaseClass){
+        String dzhReportBase = new File(".").getAbsolutePath() + File.separator + "dzhReport";
+        String casePath = dzhReportBase + File.separator + "screenshot" + File.separator + testcaseClass.getCanonicalName();
+        LogUtil.getLogger().info(casePath);
+        File dest = new File(casePath);
+        if(!dest.exists()){
+            dest.mkdirs();
+        }
+        return dest;
+    }
+
+    public void  killScreenRecordProcessAndPullVideo(String storePathForPhone, String computerPath){
+        //this.adb.killProcess(String.valueOf(this.getDzhAndroidDriver().getCapabilities().getCapability("deviceBrand")), "screenrecord");
+        //this.adb.killProcess(String.valueOf(this.getDzhAndroidDriver().getCapabilities().getCapability("deviceBrand")), "screenrecord");
+        //this.adb.killProcess(String.valueOf(this.getDzhAndroidDriver().getCapabilities().getCapability("deviceBrand")), "screenrecord");
+        Sigar sigar = new Sigar();
+        Map<String, String> map = this.getCmdlineOfProcessForPC("adb");
+        Iterator<String> iter = map.keySet().iterator();
+        while (iter.hasNext()) {
+            String key = iter.next();
+            String value = map.get(key);
+            if(value.contains("screenrecord")){
+                try {
+                    sigar.kill(key, 6);
+                } catch (SigarException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        this.sleep(3);
+        this.adb.adbPull(storePathForPhone, computerPath);
+    }
+
+    public long[] getProcessIDForPC(String processName){
+        Sigar sigar = new Sigar();
+        ProcessFinder find = new ProcessFinder(new Sigar());
+        long[] result = new long[0];
+        try {
+            result = find.find("Exe.Name.re=^.*\\\\" + processName + "(.)*.exe$");
+        } catch (SigarException e) {
+            e.printStackTrace();
+        }
+        LogUtil.getLogger().info(processName + " information: " + Arrays.toString(result).toString());
+        sigar.close();
+        return  result;
+    }
+
+    public Map<String, String> getCmdlineOfProcessForPC(String processName){
+        Map<String, String> map = new HashedMap();
+        String rtn = null;
+        Sigar sigar = new Sigar();
+        long[] result = this.getProcessIDForPC(processName);
+        for (long item : result) {
+            try {
+                String[] str = sigar.getProcArgs(String.valueOf(item));
+                rtn = Arrays.toString(str).replace(",", "");
+                map.put(String.valueOf(item), rtn);
+            } catch (SigarException e) {
+                e.printStackTrace();
+            }
+        }
+        sigar.close();
+        return  map;
     }
 
 }

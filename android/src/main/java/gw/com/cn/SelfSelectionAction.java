@@ -36,8 +36,22 @@ public class SelfSelectionAction extends BaseAction {
         Map<String, String> sessionMap = this.getDzhAndroidDriver().getSessionDetails();
     }
 
+    public void backToHome(){
+        while (true){
+            try {
+                AndroidElement androidElement = (AndroidElement) this.getDzhAndroidDriver().findElementById("com.android.dazhihui:id/bottom_menu_button_1");
+                androidElement.click();
+                break;
+            }catch (NoSuchElementException e){
+                this.back();
+            }
+        }
+    }
+
     public void deleteAllSelfStockAndLatestBrowse() {
+        this.backToHome();
         try {
+            LogUtil.getLogger().info("删除所有自选股");
             this.getDzhAndroidDriver().findElementById("com.android.dazhihui:id/home_self_stock_layout");
             this.enterIntoEditSelectionViewOnSelfSelectionView();
             this.deleteAllSelfSelectionOrLatestBrowseOnEditSelectionView(true);
@@ -46,6 +60,8 @@ public class SelfSelectionAction extends BaseAction {
             LogUtil.getLogger().info("已无自选股");
         }
         try {
+            LogUtil.getLogger().info("删除所有最新浏览");
+            this.getDzhAndroidDriver().findElementByName("最新浏览");
             this.enterIntoEditSelectionViewOnSelfSelectionView();
             this.editLatestBrowseOnEditSelectionView();
             this.deleteAllSelfSelectionOrLatestBrowseOnEditSelectionView(true);
@@ -95,7 +111,12 @@ public class SelfSelectionAction extends BaseAction {
         super.createSessionAfterTimeout();
         this.getDzhAndroidDriver().findElementByName(stockName).click();
         this.sleep(Constant.SHORT_WAIT_TIME);
+    }
 
+    public void enterIntoSelfStockView(){
+        super.createSessionAfterTimeout();
+        this.getDzhAndroidDriver().findElementById("com.android.dazhihui:id/bottom_menu_button_1").click();
+        this.explicitSleepForText("大智慧", Constant.LONG_WAIT_TIME);
     }
 
     public void editSelfSelectionOnEditSelectionView() {
@@ -259,7 +280,7 @@ public class SelfSelectionAction extends BaseAction {
     }
 
     public List<String> getAllSelfSelectionStock() {
-        int offsetY = 0;
+        int offsetY = 1;
         super.createSessionAfterTimeout();
         List<String> allStocks = new ArrayList<String>();
         AndroidElement androidElement = (AndroidElement) this.getDzhAndroidDriver().findElementById("com.android.dazhihui:id/homeview_listview");
@@ -274,10 +295,11 @@ public class SelfSelectionAction extends BaseAction {
             Dimension endDimension = stocks.get(stocks.size() - 1).getSize();
             Point endPoint = stocks.get(stocks.size() - 1).getLocation();
             int centerX = this.width / 2;
-            this.getDzhAndroidDriver().swipe(centerX, endPoint.getY() + endDimension.getHeight() - offsetY, centerX, point.getY() - offsetY, 2000);
+            this.getDzhAndroidDriver().swipe(centerX, endPoint.getY() + endDimension.getHeight() - offsetY, centerX, point.getY() - offsetY, 3000);
+            this.sleep(Constant.NORMAL_WAIT_TIME);
             LogUtil.getLogger().info("第" + ++i + "次向下滑动一页查找自选股");
             try {
-                String key = allStocks.get(allStocks.size() - 1);
+                String key = allStocks.get(allStocks.size() - 3);
                 LogUtil.getLogger().info("search key : " + key);
                 this.getDzhAndroidDriver().findElementByName(key);
                 LogUtil.getLogger().info("自选股列表已到底端");
@@ -295,7 +317,7 @@ public class SelfSelectionAction extends BaseAction {
         return list;
     }
 
-    private List removeDuplicateItem(List list) {
+    private List<String> removeDuplicateItem(List<String> list) {
         for (int i = 0; i < list.size() - 1; i++) {
             for (int j = list.size() - 1; j > i; j--) {
                 if (list.get(j).equals(list.get(i))) {
@@ -306,13 +328,48 @@ public class SelfSelectionAction extends BaseAction {
         return list;
     }
 
+    public List<String> getAllLatestBrowseOnEditLatestBrowseView() {
+        int offsetY = 1;
+        super.createSessionAfterTimeout();
+        List<String> allStocks = new ArrayList<String>();
+        AndroidElement androidElement = (AndroidElement) this.getDzhAndroidDriver().findElementById("com.android.dazhihui:id/edit_listview");
+        Dimension dimension = androidElement.getSize();
+        Point point = androidElement.getLocation();
+        int i = 1;
+        while (true) {
+            List<String> pageStock = new ArrayList<String>();
+            List<MobileElement> stocks = androidElement.findElementsById("com.android.dazhihui:id/dzh_delete_item_name");
+            for (MobileElement mobileElement : stocks) {
+                pageStock.add(mobileElement.getText());
+            }
+            LogUtil.getLogger().info("第" + i + "页自选股: " + pageStock.toString());
+            allStocks.addAll(pageStock);
+            int centerX = this.width / 2;
+            this.getDzhAndroidDriver().swipe(centerX, point.getY() + dimension.getHeight() - offsetY, centerX, point.getY(), 5000);
+            this.sleep(Constant.NORMAL_WAIT_TIME);
+            LogUtil.getLogger().info("第" + ++i + "次向下滑动一页查找股票");
+            try {
+                String key = allStocks.get(allStocks.size() - 8);
+                LogUtil.getLogger().info("search key : " + key);
+                this.getDzhAndroidDriver().findElementByName(key);
+                LogUtil.getLogger().info("最新浏览列表已到底端");
+                List<MobileElement> remainStocks = androidElement.findElementsById("com.android.dazhihui:id/dzh_delete_item_name");
+                for (MobileElement mobileElement : remainStocks) {
+                    allStocks.add(mobileElement.getText());
+                }
+                break;
+            } catch (NoSuchElementException e) {
+            }
+        }
+        LogUtil.getLogger().info("最新浏览列表下所有最新浏览: " + allStocks.toString());
+        List<String> list = removeDuplicateItem(allStocks);
+        LogUtil.getLogger().info("最新浏览列表下所有最新浏览(剔除重复的元素): " + allStocks.toString());
+        return list;
+    }
+
     public void enterIntoLatestBrowseMoreView(){
         super.createSessionAfterTimeout();
         this.getDzhAndroidDriver().findElementById("com.android.dazhihui:id/self_stock_edit_view_layout").click();
-    }
-
-    public void getAllLatestBrowse() {
-        super.createSessionAfterTimeout();
     }
 
     public void checkAddOrderOfSelfStocks(List<String> originOrder) {
