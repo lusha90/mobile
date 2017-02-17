@@ -82,19 +82,19 @@ public class BaseAction {
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-        if(Boolean.parseBoolean(capabilities.getCapability("updateTip").toString())){
+        if (Boolean.parseBoolean(capabilities.getCapability("updateTip").toString())) {
             this.waitForAdvEndWithUpdateTip();
-        }else{
+        } else {
             this.waitForAdvEnd();
         }
     }
 
-    private boolean isShowUpdateTip(){
+    private boolean isShowUpdateTip() {
         boolean tag = true;
         this.createSessionAfterTimeout();
-        try{
+        try {
             this.getDzhAndroidDriver().findElementByName("下次再说");
-        }catch (NoSuchElementException e){
+        } catch (NoSuchElementException e) {
             tag = false;
         }
         return tag;
@@ -261,33 +261,37 @@ public class BaseAction {
     }
 
     public void swipeToUp(int during) {
+        this.createSessionAfterTimeout();
         this.getDzhAndroidDriver().swipe(width / 2, height * 9 / 10, width / 2, height / 4, during);
     }
 
     public void swipeToDown(int during) {
+        this.createSessionAfterTimeout();
         this.getDzhAndroidDriver().swipe(width / 2, height / 4, width / 2, height * 9 / 10, during);
     }
 
     public void swipeToLeft(int during) {
+        this.createSessionAfterTimeout();
         this.getDzhAndroidDriver().swipe(width * 9 / 10, height / 2, width / 10, height / 2, during);
     }
 
     public void swipeToRight(int during) {
+        this.createSessionAfterTimeout();
         this.getDzhAndroidDriver().swipe(width / 10, height / 2, width * 9 / 10, height / 2, during);
     }
 
-    public File getScreenshotPath(Class testcaseClass){
+    public File getScreenshotPath(Class testcaseClass) {
         String dzhReportBase = new File(".").getAbsolutePath() + File.separator + "dzhReport";
         String casePath = dzhReportBase + File.separator + "screenshot" + File.separator + testcaseClass.getCanonicalName();
         LogUtil.getLogger().info(casePath);
         File dest = new File(casePath);
-        if(!dest.exists()){
+        if (!dest.exists()) {
             dest.mkdirs();
         }
         return dest;
     }
 
-    public void  killScreenRecordProcessAndPullVideo(String storePathForPhone, String computerPath){
+    public void killScreenRecordProcessAndPullVideo(String storePathForPhone, String computerPath) {
         //this.adb.killProcess(String.valueOf(this.getDzhAndroidDriver().getCapabilities().getCapability("deviceBrand")), "screenrecord");
         //this.adb.killProcess(String.valueOf(this.getDzhAndroidDriver().getCapabilities().getCapability("deviceBrand")), "screenrecord");
         //this.adb.killProcess(String.valueOf(this.getDzhAndroidDriver().getCapabilities().getCapability("deviceBrand")), "screenrecord");
@@ -297,7 +301,7 @@ public class BaseAction {
         while (iter.hasNext()) {
             String key = iter.next();
             String value = map.get(key);
-            if(value.contains("screenrecord")){
+            if (value.contains("screenrecord")) {
                 try {
                     sigar.kill(key, 6);
                 } catch (SigarException e) {
@@ -309,7 +313,7 @@ public class BaseAction {
         this.adb.adbPull(storePathForPhone, computerPath);
     }
 
-    public long[] getProcessIDForPC(String processName){
+    public long[] getProcessIDForPC(String processName) {
         Sigar sigar = new Sigar();
         ProcessFinder find = new ProcessFinder(new Sigar());
         long[] result = new long[0];
@@ -320,10 +324,10 @@ public class BaseAction {
         }
         LogUtil.getLogger().info(processName + " information: " + Arrays.toString(result).toString());
         sigar.close();
-        return  result;
+        return result;
     }
 
-    public Map<String, String> getCmdlineOfProcessForPC(String processName){
+    public Map<String, String> getCmdlineOfProcessForPC(String processName) {
         Map<String, String> map = new HashedMap();
         String rtn = null;
         Sigar sigar = new Sigar();
@@ -338,7 +342,54 @@ public class BaseAction {
             }
         }
         sigar.close();
-        return  map;
+        return map;
+    }
+
+    public void openWifi() {
+        this.createSessionAfterTimeout();
+        this.getDzhAndroidDriver().openNotifications();
+        String brandName = (String) this.getDzhAndroidDriver().getCapabilities().getCapability("deviceBrand");
+        if (brandName.equals("google")) {
+            AndroidElement androidElement = (AndroidElement) this.getDzhAndroidDriver().findElementByClassName("android.widget.Switch");
+            if (!Boolean.parseBoolean(androidElement.getAttribute("checked"))) {
+                androidElement.click();
+            }
+        } else if (brandName.equals("oppo")) {
+            try{
+                AndroidElement androidElement = (AndroidElement) this.getDzhAndroidDriver().findElementByName("WLAN");
+                androidElement.click();
+            }catch (NoSuchElementException e){
+            }
+        } else {
+
+        }
+        this.back();
+    }
+
+    public void closeWifi() {
+        this.createSessionAfterTimeout();
+        this.getDzhAndroidDriver().openNotifications();
+        String brandName = (String) this.getDzhAndroidDriver().getCapabilities().getCapability("deviceBrand");
+        if (brandName.equals("google")) {
+            AndroidElement androidElement = (AndroidElement) this.getDzhAndroidDriver().findElementByClassName("android.widget.Switch");
+            if (Boolean.parseBoolean(androidElement.getAttribute("checked"))) {
+                androidElement.click();
+            }
+        } else if (brandName.equals("oppo")) {
+            try{
+                this.getDzhAndroidDriver().findElementByName("WLAN");
+            }catch (NoSuchElementException e){
+                AndroidElement androidElement = (AndroidElement) this.getDzhAndroidDriver().findElementById("com.android.systemui:id/qstv_2");
+                androidElement.click();
+            }
+        } else {
+
+        }
+        this.back();
+    }
+
+    public boolean networkIsAvailable() {
+        return this.adb.networkIsAvailable();
     }
 
 }

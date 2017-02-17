@@ -162,7 +162,11 @@ public class SelfSelectionAction extends BaseAction {
         return text;
     }
 
-    public void selfStockOperatorOnSelectionView(String stockName, StockOperator stockOperator) {
+    public void selfStockOperatorOnSelectionView(String stockName, StockOperator stockOperator){
+        this.selfStockOperatorOnSelectionView(stockName, stockOperator, true);
+    }
+
+    public void selfStockOperatorOnSelectionView(String stockName, StockOperator stockOperator, boolean networkIsAvailable) {
         super.createSessionAfterTimeout();
         List<AndroidElement> stocks = this.getDzhAndroidDriver().findElementsById("com.android.dazhihui:id/tv_name");
         for (AndroidElement androidElement : stocks) {
@@ -179,12 +183,17 @@ public class SelfSelectionAction extends BaseAction {
                     case DEL:
                         this.getDzhAndroidDriver().findElementByName("删除").click();
                         this.getDzhAndroidDriver().findElementById("android:id/button1").click();
-                        try {
+                        if(networkIsAvailable){
+                            try {
+                                this.getDzhAndroidDriver().findElementByName(stockName);
+                                LogUtil.getLogger().info(stockName + " 自选股删除失败");
+                                Assert.assertEquals(true, false, stockName + " 自选股删除失败");
+                            } catch (NoSuchElementException e) {
+                                LogUtil.getLogger().info(stockName + " 自选股删除成功");
+                            }
+                        }else{
                             this.getDzhAndroidDriver().findElementByName(stockName);
-                            LogUtil.getLogger().info(stockName + " 自选股删除失败");
-                            Assert.assertEquals(true, false, stockName + " 自选股删除失败");
-                        } catch (NoSuchElementException e) {
-                            LogUtil.getLogger().info(stockName + " 自选股删除成功");
+                            LogUtil.getLogger().info(stockName + " 断网时自选股删除失败");
                         }
                         return;
                     case TOP:
@@ -349,7 +358,7 @@ public class SelfSelectionAction extends BaseAction {
             this.sleep(Constant.NORMAL_WAIT_TIME);
             LogUtil.getLogger().info("第" + ++i + "次向下滑动一页查找股票");
             try {
-                String key = allStocks.get(allStocks.size() - 8);
+                String key = allStocks.get(allStocks.size() - 10);
                 LogUtil.getLogger().info("search key : " + key);
                 this.getDzhAndroidDriver().findElementByName(key);
                 LogUtil.getLogger().info("最新浏览列表已到底端");
@@ -451,6 +460,11 @@ public class SelfSelectionAction extends BaseAction {
     public void checkNoExistSpecialSelfStockOnEditSelectionViewOrSelectionView(String selfStockName) {
         super.createSessionAfterTimeout();
         this.checkPoint.checkTextNotExist(selfStockName);
+    }
+
+    public void checkExistSpecialSelfStockOnEditSelectionViewOrSelectionView(String selfStockName) {
+        super.createSessionAfterTimeout();
+        this.checkPoint.checkTextExist(selfStockName);
     }
 
     public void checkStockIsSelfOnSearchStockView(String selfStockName) {

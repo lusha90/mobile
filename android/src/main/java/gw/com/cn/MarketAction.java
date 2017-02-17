@@ -213,4 +213,20 @@ public class MarketAction extends BaseAction {
         return i;
     }
 
+    public enum SortBy {
+        ZuiXin, ZhangFu, ChengJiaoLiang, ChengJiaoE, ZhenFu, ZhangSu, HuanShou, LiangBi, WeiBi, ShiYing, ShiJing
+    }
+
+    public void sortStockOnStockTypeView(String sortBy){
+        super.createSessionAfterTimeout();
+        AndroidElement androidElement = (AndroidElement) this.getDzhAndroidDriver().findElementByClassName("android.view.View");
+        Point stockPoint = androidElement.getLocation();
+        Dimension stockDimension = androidElement.getSize();
+        Rectangle rectangle = new Rectangle(stockPoint.getX(), stockPoint.getY(), stockDimension.getWidth(), stockDimension.getHeight());
+        File snapshotFile = this.getDzhAndroidDriver().getScreenshotAs(OutputType.FILE);
+        List<String> recognizedContent = OcrUtil.recognizedTextSplitResult((String)
+                this.getDzhAndroidDriver().getCapabilities().getCapability("testdataPath"), snapshotFile.getAbsolutePath(), rectangle);
+
+    }
+
 }

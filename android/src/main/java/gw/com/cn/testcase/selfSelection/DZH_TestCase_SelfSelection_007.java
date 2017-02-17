@@ -15,7 +15,7 @@ public class DZH_TestCase_SelfSelection_007 extends DZHBaseTestCase {
     public void setUp() {
         super.setUp();
         selfSelectionAction = new SelfSelectionAction("master");
-        LogUtil.getLogger().info("1：删除所以自选股");
+        LogUtil.getLogger().info("1：删除所有自选股");
         selfSelectionAction.skipAdv();
         selfSelectionAction.deleteAllSelfStockAndLatestBrowse();
     }
