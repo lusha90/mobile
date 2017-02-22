@@ -19,7 +19,7 @@ public class DZH_TestCase_SelfSelection_024 extends DZHBaseTestCase {
         selfSelectionAction.skipAdv();
         selfSelectionAction.deleteAllSelfStockAndLatestBrowse();
     }
-    @Test(description = "自选股首页删除单个最新浏览")
+    @Test(description = "打开自选页面显示最新浏览（最新浏览添加顺序）")
     public void testStep() {
         super.testStep();
         LogUtil.getLogger().info("1：进入自选股页面");
@@ -36,11 +36,24 @@ public class DZH_TestCase_SelfSelection_024 extends DZHBaseTestCase {
         LogUtil.getLogger().info("7：点击\"神州信息\"，进行自选股浏览");
         selfSelectionAction.enterIntoStockDetailViewOnSearchStockView("神州信息");
         selfSelectionAction.checkPoint.checkTextNotExist("搜股票");
-        LogUtil.getLogger().info("8：返回到自选股页面");
+        LogUtil.getLogger().info("8：返回到自选股编辑页面");
         selfSelectionAction.back();
+        selfSelectionAction.checkPoint.checkTextExist("神州信息");
+        LogUtil.getLogger().info("9：点击搜索图标");
+        selfSelectionAction.enterIntoSearchStockViewOnEditSelfSelectionView();
+        LogUtil.getLogger().info("10：股票代码输入框输入555");
+        selfSelectionAction.typeTextOnSearchStockView("555");
+        LogUtil.getLogger().info("11：点击\"海航创新\"，进行股票浏览");
+        selfSelectionAction.enterIntoStockDetailViewOnSearchStockView("海航创新");
+        selfSelectionAction.checkPoint.checkTextNotExist("搜股票");
+        LogUtil.getLogger().info("12：返回到自选股编辑页面");
         selfSelectionAction.back();
-        selfSelectionAction.selfStockOperatorOnSelectionView("神州信息", SelfSelectionAction.StockOperator.DEL);
-        selfSelectionAction.checkPoint.checkTextNotExist("神州信息");
+        selfSelectionAction.checkPoint.checkTextExist("神州信息");
+        selfSelectionAction.checkPoint.checkTextExist("海航创新");
+        LogUtil.getLogger().info("13：返回到自选股页面");
+        selfSelectionAction.back();
+        selfSelectionAction.checkPoint.checkTextExist("神州信息");
+        selfSelectionAction.checkPoint.checkTextExist("海航创新");
     }
     @AfterMethod
     public void tearDown() {

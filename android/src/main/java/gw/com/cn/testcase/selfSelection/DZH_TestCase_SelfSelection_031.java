@@ -7,7 +7,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-public class DZH_TestCase_SelfSelection_023 extends DZHBaseTestCase {
+public class DZH_TestCase_SelfSelection_031 extends DZHBaseTestCase {
 
     private SelfSelectionAction selfSelectionAction;
 
@@ -19,7 +19,7 @@ public class DZH_TestCase_SelfSelection_023 extends DZHBaseTestCase {
         selfSelectionAction.skipAdv();
         selfSelectionAction.deleteAllSelfStockAndLatestBrowse();
     }
-    @Test(description = "打开自选页面显示最新浏览")
+    @Test(description = "自选股首页-最新浏览更多选项")
     public void testStep() {
         super.testStep();
         LogUtil.getLogger().info("1：进入自选股页面");
@@ -36,12 +36,12 @@ public class DZH_TestCase_SelfSelection_023 extends DZHBaseTestCase {
         LogUtil.getLogger().info("7：点击\"神州信息\"，进行自选股浏览");
         selfSelectionAction.enterIntoStockDetailViewOnSearchStockView("神州信息");
         selfSelectionAction.checkPoint.checkTextNotExist("搜股票");
-        LogUtil.getLogger().info("8：返回到自选股编辑页面");
+        LogUtil.getLogger().info("8：返回到自选股页面");
         selfSelectionAction.back();
-        selfSelectionAction.checkPoint.checkTextExist("神州信息");
-        LogUtil.getLogger().info("9：返回到自选股页面");
         selfSelectionAction.back();
-        selfSelectionAction.checkPoint.checkTextExist("神州信息");
+        selfSelectionAction.enterIntoLatestBrowseMoreView();
+        selfSelectionAction.checkPoint.checkTextNotExist("大智慧");
+        selfSelectionAction.back();
     }
     @AfterMethod
     public void tearDown() {

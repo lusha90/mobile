@@ -19,7 +19,7 @@ public class DZH_TestCase_SelfSelection_025 extends DZHBaseTestCase {
         selfSelectionAction.skipAdv();
         selfSelectionAction.deleteAllSelfStockAndLatestBrowse();
     }
-    @Test(description = "自选股首页-最新浏览更多选项")
+    @Test(description = "关闭自选页面显示最新浏览")
     public void testStep() {
         super.testStep();
         LogUtil.getLogger().info("1：进入自选股页面");
@@ -27,8 +27,8 @@ public class DZH_TestCase_SelfSelection_025 extends DZHBaseTestCase {
         selfSelectionAction.enterIntoEditSelectionViewOnSelfSelectionView();
         LogUtil.getLogger().info("3：点击\"编辑最新浏览\"");
         selfSelectionAction.editLatestBrowseOnEditSelectionView();
-        LogUtil.getLogger().info("4：打开自选页面显示最新浏览");
-        selfSelectionAction.toggleShowLatestBrowse(true);
+        LogUtil.getLogger().info("4：关闭自选页面显示最新浏览");
+        selfSelectionAction.toggleShowLatestBrowse(false);
         LogUtil.getLogger().info("5：点击搜索图标");
         selfSelectionAction.enterIntoSearchStockViewOnEditSelfSelectionView();
         LogUtil.getLogger().info("6：股票代码输入框输入555");
@@ -36,12 +36,12 @@ public class DZH_TestCase_SelfSelection_025 extends DZHBaseTestCase {
         LogUtil.getLogger().info("7：点击\"神州信息\"，进行自选股浏览");
         selfSelectionAction.enterIntoStockDetailViewOnSearchStockView("神州信息");
         selfSelectionAction.checkPoint.checkTextNotExist("搜股票");
-        LogUtil.getLogger().info("8：返回到自选股页面");
+        LogUtil.getLogger().info("8：返回到自选股编辑页面");
         selfSelectionAction.back();
+        selfSelectionAction.checkPoint.checkTextExist("神州信息");
+        LogUtil.getLogger().info("9：返回到自选股页面");
         selfSelectionAction.back();
-        selfSelectionAction.enterIntoLatestBrowseMoreView();
-        selfSelectionAction.checkPoint.checkTextNotExist("大智慧");
-        selfSelectionAction.back();
+        selfSelectionAction.checkPoint.checkTextNotExist("神州信息");
     }
     @AfterMethod
     public void tearDown() {

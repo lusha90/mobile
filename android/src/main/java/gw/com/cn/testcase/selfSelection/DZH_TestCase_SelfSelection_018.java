@@ -3,9 +3,12 @@ package gw.com.cn.testcase.selfSelection;
 import gw.com.cn.SelfSelectionAction;
 import gw.com.cn.testcase.DZHBaseTestCase;
 import gw.com.cn.util.LogUtil;
+import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import java.util.List;
 
 public class DZH_TestCase_SelfSelection_018 extends DZHBaseTestCase {
 
@@ -15,49 +18,51 @@ public class DZH_TestCase_SelfSelection_018 extends DZHBaseTestCase {
     public void setUp() {
         super.setUp();
         selfSelectionAction = new SelfSelectionAction("master");
-        LogUtil.getLogger().info("1：null");
+        LogUtil.getLogger().info("1：删除所有自选股");
         selfSelectionAction.skipAdv();
         selfSelectionAction.deleteAllSelfStockAndLatestBrowse();
     }
-    @Test(description = "打开自选页面显示最新浏览（最新浏览添加顺序）")
+    @Test(description = "多个自选股置顶")
     public void testStep() {
         super.testStep();
         LogUtil.getLogger().info("1：进入自选股页面");
-        LogUtil.getLogger().info("2：点击编辑按钮，进入编辑自选股页面");
         selfSelectionAction.enterIntoEditSelectionViewOnSelfSelectionView();
-        LogUtil.getLogger().info("3：点击\"编辑最新浏览\"");
         selfSelectionAction.editLatestBrowseOnEditSelectionView();
-        LogUtil.getLogger().info("4：打开自选页面显示最新浏览");
-        selfSelectionAction.toggleShowLatestBrowse(true);
-        LogUtil.getLogger().info("5：点击搜索图标");
-        selfSelectionAction.enterIntoSearchStockViewOnEditSelfSelectionView();
-        LogUtil.getLogger().info("6：股票代码输入框输入555");
+        selfSelectionAction.toggleShowLatestBrowse(false);
+        selfSelectionAction.back();
+        LogUtil.getLogger().info("2：点击搜索图标");
+        selfSelectionAction.enterIntoSearchStockViewOnSelfSelectionView();
+        LogUtil.getLogger().info("3：股票代码输入框输入555");
         selfSelectionAction.typeTextOnSearchStockView("555");
-        LogUtil.getLogger().info("7：点击\"神州信息\"，进行自选股浏览");
-        selfSelectionAction.enterIntoStockDetailViewOnSearchStockView("神州信息");
-        selfSelectionAction.checkPoint.checkTextNotExist("搜股票");
-        LogUtil.getLogger().info("8：返回到自选股编辑页面");
+        LogUtil.getLogger().info("4：依次按顺序添加5个自选股");
+        List<String> stocks = selfSelectionAction.addStocksOnSearchStockView(5);
+        LogUtil.getLogger().info("5：返回到自选股页面");
         selfSelectionAction.back();
-        selfSelectionAction.checkPoint.checkTextExist("神州信息");
-        LogUtil.getLogger().info("9：点击搜索图标");
-        selfSelectionAction.enterIntoSearchStockViewOnEditSelfSelectionView();
-        LogUtil.getLogger().info("10：股票代码输入框输入555");
-        selfSelectionAction.typeTextOnSearchStockView("555");
-        LogUtil.getLogger().info("11：点击\"海航创新\"，进行股票浏览");
-        selfSelectionAction.enterIntoStockDetailViewOnSearchStockView("海航创新");
-        selfSelectionAction.checkPoint.checkTextNotExist("搜股票");
-        LogUtil.getLogger().info("12：返回到自选股编辑页面");
         selfSelectionAction.back();
-        selfSelectionAction.checkPoint.checkTextExist("神州信息");
-        selfSelectionAction.checkPoint.checkTextExist("海航创新");
-        LogUtil.getLogger().info("13：返回到自选股页面");
-        selfSelectionAction.back();
-        selfSelectionAction.checkPoint.checkTextExist("神州信息");
-        selfSelectionAction.checkPoint.checkTextExist("海航创新");
+        LogUtil.getLogger().info("6：长按海航创新后选择置顶");
+        selfSelectionAction.selfStockOperatorOnSelectionView(stocks.get(0), SelfSelectionAction.StockOperator.TOP);
+        selfSelectionAction.checkSelfStockTop(stocks.get(0));
+        LogUtil.getLogger().info("7：置顶东吴证券");
+        selfSelectionAction.selfStockOperatorOnSelectionView(stocks.get(1), SelfSelectionAction.StockOperator.TOP);
+        List<String> allStocks = selfSelectionAction.getAllSelfSelectionStock();
+        LogUtil.getLogger().info("expect: " + stocks.get(1) + " actual:" + allStocks.get(1) + " 检查" + stocks.get(1) + "是否置顶");
+        Assert.assertEquals(stocks.get(1),allStocks.get(1));
+        LogUtil.getLogger().info("8：取消置顶海航创新");
+        selfSelectionAction.selfStockOperatorOnSelectionView(stocks.get(0), SelfSelectionAction.StockOperator.CANCELTOP);
+        LogUtil.getLogger().info("9：取消置顶东吴证券");
+        selfSelectionAction.selfStockOperatorOnSelectionView(stocks.get(1), SelfSelectionAction.StockOperator.CANCELTOP);
+        LogUtil.getLogger().info("expect: " + stocks.get(0) + " actual:" + allStocks.get(0) + " 检查" + stocks.get(1) + "是否取消置顶");
+        Assert.assertEquals(stocks.get(0),allStocks.get(0));
+        LogUtil.getLogger().info("expect: " + stocks.get(1) + " actual:" + allStocks.get(1) + " 检查" + stocks.get(1) + "是否取消置顶");
+        Assert.assertEquals(stocks.get(1),allStocks.get(1));
     }
     @AfterMethod
     public void tearDown() {
         super.tearDown();
+        selfSelectionAction.enterIntoEditSelectionViewOnSelfSelectionView();
+        selfSelectionAction.editLatestBrowseOnEditSelectionView();
+        selfSelectionAction.toggleShowLatestBrowse(true);
+        selfSelectionAction.back();
         selfSelectionAction.deleteAllSelfStockAndLatestBrowse();
     }
 }

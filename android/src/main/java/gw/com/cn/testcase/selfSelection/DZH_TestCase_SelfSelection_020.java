@@ -17,42 +17,34 @@ public class DZH_TestCase_SelfSelection_020 extends DZHBaseTestCase {
         selfSelectionAction = new SelfSelectionAction("master");
         LogUtil.getLogger().info("1：null");
         selfSelectionAction.skipAdv();
-        selfSelectionAction.deleteAllSelfStockAndLatestBrowse();
     }
-    @Test(description = "打开自选页面显示最新浏览（搜索页面添加自选股）")
+    @Test(description = "自选股页面其他功能验证")
     public void testStep() {
         super.testStep();
         LogUtil.getLogger().info("1：进入自选股页面");
-        LogUtil.getLogger().info("2：点击编辑按钮，进入编辑自选股页面");
-        selfSelectionAction.enterIntoEditSelectionViewOnSelfSelectionView();
-        LogUtil.getLogger().info("3：点击\"编辑最新浏览\"");
-        selfSelectionAction.editLatestBrowseOnEditSelectionView();
-        LogUtil.getLogger().info("4：打开自选页面显示最新浏览");
-        selfSelectionAction.toggleShowLatestBrowse(true);
-        LogUtil.getLogger().info("5：点击搜索图标");
-        selfSelectionAction.enterIntoSearchStockViewOnEditSelfSelectionView();
-        LogUtil.getLogger().info("6：股票代码输入框输入555");
-        selfSelectionAction.typeTextOnSearchStockView("555");
-        LogUtil.getLogger().info("7：点击\"神州信息\"，进行自选股浏览");
-        selfSelectionAction.enterIntoStockDetailViewOnSearchStockView("神州信息");
-        selfSelectionAction.checkPoint.checkTextNotExist("搜股票");
-        LogUtil.getLogger().info("8：返回到自选股编辑页面");
+        LogUtil.getLogger().info("2：点击上证");
+        selfSelectionAction.enterIntoOtherView(SelfSelectionAction.SelfTitle.SHANGZHENG);
+        selfSelectionAction.checkPoint.checkTextNotExist("大智慧");
+        LogUtil.getLogger().info("3：返回到自选股页面");
         selfSelectionAction.back();
-        selfSelectionAction.checkPoint.checkTextExist("神州信息");
+        LogUtil.getLogger().info("4：点击创业");
+        selfSelectionAction.enterIntoOtherView(SelfSelectionAction.SelfTitle.CHUANGYE);
+        selfSelectionAction.checkPoint.checkTextNotExist("大智慧");
+        LogUtil.getLogger().info("5：返回到自选股页面");
+        selfSelectionAction.back();
+        LogUtil.getLogger().info("6：点击新闻");
+        selfSelectionAction.enterIntoOtherView(SelfSelectionAction.SelfTitle.NEWS);
+        selfSelectionAction.checkPoint.checkTextNotExist("大智慧");
+        LogUtil.getLogger().info("7：返回到自选股页面");
+        selfSelectionAction.back();
+        LogUtil.getLogger().info("8：点击资金");
+        selfSelectionAction.enterIntoOtherView(SelfSelectionAction.SelfTitle.MONEY);
+        selfSelectionAction.checkPoint.checkTextNotExist("大智慧");
         LogUtil.getLogger().info("9：返回到自选股页面");
         selfSelectionAction.back();
-        selfSelectionAction.checkPoint.checkTextExist("神州信息");
-        LogUtil.getLogger().info("10：点击搜索图标，将最新浏览下的神州信息添加为自选股");
-        selfSelectionAction.enterIntoSearchStockViewOnSelfSelectionView();
-        selfSelectionAction.sleep(3);
-        selfSelectionAction.addStocksOnSearchStockView(1);
-        LogUtil.getLogger().info("11：返回到自选股页面");
-        selfSelectionAction.back();
-        selfSelectionAction.checkPoint.checkTextExist("神州信息");
     }
     @AfterMethod
     public void tearDown() {
         super.tearDown();
-        selfSelectionAction.deleteAllSelfStockAndLatestBrowse();
     }
 }

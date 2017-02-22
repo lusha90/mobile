@@ -3,13 +3,14 @@ package gw.com.cn.testcase.selfSelection;
 import gw.com.cn.SelfSelectionAction;
 import gw.com.cn.testcase.DZHBaseTestCase;
 import gw.com.cn.util.LogUtil;
+import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.util.List;
 
-public class DZH_TestCase_SelfSelection_011 extends DZHBaseTestCase {
+public class DZH_TestCase_SelfSelection_035 extends DZHBaseTestCase {
 
     private SelfSelectionAction selfSelectionAction;
 
@@ -21,7 +22,8 @@ public class DZH_TestCase_SelfSelection_011 extends DZHBaseTestCase {
         selfSelectionAction.skipAdv();
         selfSelectionAction.deleteAllSelfStockAndLatestBrowse();
     }
-    @Test(description = "单个自选股置顶")
+
+    @Test(description = "断网时删除自选股")
     public void testStep() {
         super.testStep();
         LogUtil.getLogger().info("1：进入自选股页面");
@@ -30,21 +32,22 @@ public class DZH_TestCase_SelfSelection_011 extends DZHBaseTestCase {
         LogUtil.getLogger().info("3：股票代码输入框输入555");
         selfSelectionAction.typeTextOnSearchStockView("555");
         LogUtil.getLogger().info("4：依次按顺序添加5个自选股");
-        List<String> stocks = selfSelectionAction.addStocksOnSearchStockView(5);
+        List<String> list = selfSelectionAction.addStocksOnSearchStockView(5);
         LogUtil.getLogger().info("5：返回到自选股页面");
         selfSelectionAction.back();
         selfSelectionAction.back();
-        LogUtil.getLogger().info("6：长按海航创新后选择置顶");
-        selfSelectionAction.selfStockOperatorOnSelectionView(stocks.get(0), SelfSelectionAction.StockOperator.TOP);
-        selfSelectionAction.checkSelfStockTop(stocks.get(0));
-        LogUtil.getLogger().info("7：长按海航创新后选择取消置顶");
-        selfSelectionAction.selfStockOperatorOnSelectionView(stocks.get(0), SelfSelectionAction.StockOperator.CANCELTOP);
-        selfSelectionAction.selfStockOperatorOnSelectionView(stocks.get(1), SelfSelectionAction.StockOperator.TOP);
-        selfSelectionAction.checkSelfStockTop(stocks.get(1));
+        LogUtil.getLogger().info("6：删除一个自选股");
+        selfSelectionAction.closeWifi();
+        Assert.assertEquals(selfSelectionAction.networkIsAvailable(), false, "网络连接已经断开");
+        selfSelectionAction.selfStockOperatorOnSelectionView(list.get(0), SelfSelectionAction.StockOperator.DEL, false);
+        selfSelectionAction.checkExistSpecialSelfStockOnEditSelectionViewOrSelectionView(list.get(0));
     }
+
     @AfterMethod
     public void tearDown() {
         super.tearDown();
+        selfSelectionAction.openWifi();
+        selfSelectionAction.back();
         selfSelectionAction.deleteAllSelfStockAndLatestBrowse();
     }
 }
