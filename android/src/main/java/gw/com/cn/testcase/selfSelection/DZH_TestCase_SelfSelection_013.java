@@ -7,9 +7,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import java.util.List;
-
-public class DZH_TestCase_SelfSelection_009 extends DZHBaseTestCase {
+public class DZH_TestCase_SelfSelection_013 extends DZHBaseTestCase {
 
     private SelfSelectionAction selfSelectionAction;
 
@@ -22,7 +20,7 @@ public class DZH_TestCase_SelfSelection_009 extends DZHBaseTestCase {
         selfSelectionAction.deleteAllSelfStockAndLatestBrowse();
     }
 
-    @Test(description = "自选股涨跌额排序后删除自选股再查看涨跌额排序")
+    @Test(description = "自选股涨幅排序")
     public void testStep() {
         super.testStep();
         LogUtil.getLogger().info("1：进入自选股页面");
@@ -31,28 +29,19 @@ public class DZH_TestCase_SelfSelection_009 extends DZHBaseTestCase {
         LogUtil.getLogger().info("3：股票代码输入框输入555");
         selfSelectionAction.typeTextOnSearchStockView("555");
         LogUtil.getLogger().info("4：依次按顺序添加5个自选股");
-        List<String> stocks = selfSelectionAction.addStocksOnSearchStockView(5);
+        selfSelectionAction.addStocksOnSearchStockView(5);
         LogUtil.getLogger().info("5：返回到自选股页面");
         selfSelectionAction.back();
         selfSelectionAction.back();
-        selfSelectionAction.switchSortType(SelfSelectionAction.SortType.ZHANGDIEE);
-        LogUtil.getLogger().info("6：点击涨跌额按钮进行降序排序");
+        selfSelectionAction.switchSortType(SelfSelectionAction.SortType.ZHANGFU);
+        LogUtil.getLogger().info("6：点击涨幅按钮进行降序排序");
         selfSelectionAction.increaseSortOnSelfSelectionView(true);
         selfSelectionAction.checkIncreaseSortOnSelfSelectionView(true);
-        LogUtil.getLogger().info("7：长按某个自选股删除它");
-        selfSelectionAction.selfStockOperatorOnSelectionView(stocks.get(0), SelfSelectionAction.StockOperator.DEL);
-        stocks.remove(0);
-        selfSelectionAction.checkIncreaseSortOnSelfSelectionView(true);
-        LogUtil.getLogger().info("8：点击涨跌额按钮进行升序排序点击涨跌额按钮进行升序排序");
+        LogUtil.getLogger().info("7：点击涨幅按钮进行升序排序");
         selfSelectionAction.increaseSortOnSelfSelectionView(false);
         selfSelectionAction.checkIncreaseSortOnSelfSelectionView(false);
-        LogUtil.getLogger().info("9：长按某个自选股删除它");
-        selfSelectionAction.selfStockOperatorOnSelectionView(stocks.get(2), SelfSelectionAction.StockOperator.DEL);
-        stocks.remove(2);
-        selfSelectionAction.checkIncreaseSortOnSelfSelectionView(false);
-        LogUtil.getLogger().info("10：点击涨跌额按钮进行取消排序");
+        LogUtil.getLogger().info("8：点击涨幅按钮进行取消排序");
         selfSelectionAction.cancelSortOnSelfSelectionView();
-        selfSelectionAction.checkAddOrderOfSelfStocks(stocks);
     }
 
     @AfterMethod

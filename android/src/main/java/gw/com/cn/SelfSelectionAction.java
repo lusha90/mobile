@@ -24,6 +24,10 @@ public class SelfSelectionAction extends BaseAction {
         SHANGZHENG, CHUANGYE, NEWS, MONEY
     }
 
+    public enum SortType {
+        ZHANGFU, ZHANGDIEE, CHENGJIAOLIANG
+    }
+
     public CheckPoint checkPoint;
 
     public SelfSelectionAction(String deviceType) {
@@ -381,6 +385,41 @@ public class SelfSelectionAction extends BaseAction {
         this.getDzhAndroidDriver().findElementById("com.android.dazhihui:id/self_stock_edit_view_layout").click();
     }
 
+    public void switchSortType(SortType sortType){
+        super.createSessionAfterTimeout();
+        String text = this.getDzhAndroidDriver().findElementById("com.android.dazhihui:id/zf_sort_text").getText();
+        AndroidElement androidElement = (AndroidElement) this.getDzhAndroidDriver().findElementById("com.android.dazhihui:id/tv_zf");
+        switch (sortType) {
+            case ZHANGDIEE:
+                if(text.equals("涨幅")){
+                    androidElement.click();
+                }else if(text.equals("涨跌额")){
+                }else if(text.equals("成交量")){
+                    androidElement.click();
+                    androidElement.click();
+                }
+                return;
+            case ZHANGFU:
+                if(text.equals("涨幅")){
+                }else if(text.equals("涨跌额")){
+                    androidElement.click();
+                    androidElement.click();
+                }else if(text.equals("成交量")){
+                    androidElement.click();
+                }
+                return;
+            case CHENGJIAOLIANG:
+                if(text.equals("涨幅")){
+                    androidElement.click();
+                    androidElement.click();
+                }else if(text.equals("涨跌额")){
+                    androidElement.click();
+                }else if(text.equals("成交量")){
+                }
+                return;
+        }
+    }
+
     public void checkAddOrderOfSelfStocks(List<String> originOrder) {
         super.createSessionAfterTimeout();
         List<AndroidElement> selfList = this.getDzhAndroidDriver().findElementsById("com.android.dazhihui:id/tv_name");
@@ -429,10 +468,16 @@ public class SelfSelectionAction extends BaseAction {
         for (AndroidElement item : selfList) {
             String text = item.getText();
             text = text.replace("%", "").replace("+", "");
-            if (text.equals("--")) {
+            if (text.equals("--") || text.equals("-")) {
                 text = "0.00";
             }
-            Double stockIncrease = Double.parseDouble(text);
+            Double stockIncrease = 0.0;
+            if(text.contains("万")){
+                text = text.replace("万", "");
+                stockIncrease = Double.parseDouble(text) * 10000;
+            }else{
+                stockIncrease = Double.parseDouble(text);
+            }
             unSort.add(stockIncrease);
         }
         if (isDesc) {

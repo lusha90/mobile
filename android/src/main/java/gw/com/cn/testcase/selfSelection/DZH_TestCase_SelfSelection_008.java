@@ -35,6 +35,7 @@ public class DZH_TestCase_SelfSelection_008 extends DZHBaseTestCase {
         LogUtil.getLogger().info("5：返回到自选股页面");
         selfSelectionAction.back();
         selfSelectionAction.back();
+        selfSelectionAction.switchSortType(SelfSelectionAction.SortType.ZHANGDIEE);
         LogUtil.getLogger().info("6：点击涨跌额按钮进行降序排序");
         selfSelectionAction.increaseSortOnSelfSelectionView(true);
         selfSelectionAction.checkIncreaseSortOnSelfSelectionView(true);

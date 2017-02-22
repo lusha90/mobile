@@ -52,9 +52,9 @@ public class BaseAction {
 
     private void createDZHAndroidDriver(String deviceType) {
         DesiredCapabilities capabilities = new DesiredCapabilities();
+        capabilities.setCapability("testdataPath", dzhInfo.getTestdataPath());
         if (dzhInfo.isReplaceExistingApp()) {
             capabilities.setCapability("app", dzhInfo.getAppPath());
-            capabilities.setCapability("testdataPath", dzhInfo.getTestdataPath());
         }
         List<DeviceInfo> devices = dzhInfo.getDevicesInfo();
         for (DeviceInfo device : devices) {
