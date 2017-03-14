@@ -5,22 +5,23 @@
   "sdkPath": "D:\\Program\\sdk",
   "appPath": "C:\\dzh.apk",
   "downloadAppFromServer": false,
-  "replaceExistingApp" : false,
-  "testdataPath" : "D:\\Program Files\\Tesseract-OCR\\tessdata",
-  "menuConf" : "http://mnews.gw.com.cn/wap/data/mobileconfig/sc850.json",
+  "replaceExistingApp": false,
+  "testdataPath": "D:\\Program Files\\Tesseract-OCR\\tessdata",
+  "menuConf": "http://mnews.gw.com.cn/wap/data/mobileconfig/sc850.json",
   "devices": [
     {
       "deviceBrand": "google",
       "brandSeries": "nexus6p",
       "deviceType": "master",
-      "deviceName": "ENU7N16709000499",
+      "deviceName": "9d454400",
       "platformName": "Android",
       "platformVersion": "25",
       "automationName": "Appium",
       "sessionTimeout": "120",
       "language": "zh_CN",
       "locale": "CN",
-      "updateTip": false
+      "updateTip": false,
+      "keyboard" : "origin"
     },
     {
       "deviceBrand": "oppo",
@@ -33,7 +34,18 @@
       "sessionTimeout": "120",
       "language": "zh_CN",
       "locale": "CN",
-      "updateTip": true
+      "updateTip": true,
+      "keyboard" : "origin"
+    }
+  ],
+  "account": [
+    {
+      "accountID": "110569450",
+      "accountPwd": "lu123456"
+    },
+    {
+      "accountID": "110569451",
+      "accountPwd": "lu123456"
     }
   ]
 }

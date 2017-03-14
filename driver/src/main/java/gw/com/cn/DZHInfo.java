@@ -25,6 +25,18 @@ public class DZHInfo {
 
     private String testdataPath = "D:\\Program Files\\Tesseract-OCR\\tessdata";
 
+    private List<DeviceInfo> devicesInfo;
+
+    private List<Account> accounts;
+
+    public List<Account> getAccounts() {
+        return accounts;
+    }
+
+    public void setAccounts(List<Account> accounts) {
+        this.accounts = accounts;
+    }
+
     public String getTestdataPath() {
         return testdataPath;
     }
@@ -32,8 +44,6 @@ public class DZHInfo {
     public void setTestdataPath(String testdataPath) {
         this.testdataPath = testdataPath;
     }
-
-    private List<DeviceInfo> devicesInfo;
 
     public String getMenuConf() {
         return menuConf;

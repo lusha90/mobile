@@ -58,10 +58,22 @@ public class DZHRunner {
             deviceInfo.setLanguage(deviceJSONObject.has("language") ? (String) deviceJSONObject.get("language") : deviceInfo.getLanguage());
             deviceInfo.setLocale(deviceJSONObject.has("locale") ? (String) deviceJSONObject.get("locale") : deviceInfo.getLocale());
             deviceInfo.setUpdateTip(deviceJSONObject.has("updateTip") ? (Boolean) deviceJSONObject.get("updateTip") : deviceInfo.isUpdateTip());
+            deviceInfo.setKeyboard(deviceJSONObject.has("keyboard") ? (String) deviceJSONObject.get("keyboard") : deviceInfo.getKeyboard());
             deviceInfo.setSessionTimeout(deviceJSONObject.has("sessionTimeout") ? (String) deviceJSONObject.get("sessionTimeout") : deviceInfo.getSessionTimeout());
             devicesList.add(deviceInfo);
         }
         dzhInfo.setDevicesInfo(devicesList);
+
+        List<Account> accounts = new ArrayList<Account>();
+        JSONArray jSONArrayAccount = jSONObject.getJSONArray("account");
+        for (int i = 0; i < jSONArray.length(); i++) {
+            JSONObject accountJSONObject = jSONArrayAccount.getJSONObject(i);
+            Account account = new Account();
+            account.setAccountID(accountJSONObject.has("accountID") ? (String) accountJSONObject.get("accountID") : account.getAccountID());
+            account.setAccountPwd(accountJSONObject.has("accountPwd") ? (String) accountJSONObject.get("accountPwd") : account.getAccountPwd());
+            accounts.add(account);
+        }
+        dzhInfo.setAccounts(accounts);
         return dzhInfo;
     }
 

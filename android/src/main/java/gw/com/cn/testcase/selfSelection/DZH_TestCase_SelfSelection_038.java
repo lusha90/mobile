@@ -1,0 +1,50 @@
+package gw.com.cn.testcase.selfSelection;
+
+import gw.com.cn.SelfSelectionAction;
+import gw.com.cn.testcase.DZHBaseTestCase;
+import gw.com.cn.util.LogUtil;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
+public class DZH_TestCase_SelfSelection_038 extends DZHBaseTestCase {
+
+    private SelfSelectionAction selfSelectionAction;
+
+    @BeforeMethod
+    public void setUp() {
+        super.setUp();
+        selfSelectionAction = new SelfSelectionAction("master");
+        LogUtil.getLogger().info("1：删除所有自选股");
+        selfSelectionAction.skipAdv();
+        selfSelectionAction.deleteAllSelfStockAndLatestBrowse();
+    }
+
+    @Test(description = "自选股编辑页面删除单个最新浏览")
+    public void testStep() {
+        super.testStep();
+        LogUtil.getLogger().info("1：进入自选股页面");
+        LogUtil.getLogger().info("2：点击搜索图标");
+        selfSelectionAction.enterIntoSearchStockViewOnSelfSelectionView();
+        LogUtil.getLogger().info("3：股票代码输入框输入555");
+        selfSelectionAction.typeTextOnSearchStockView("555");
+        LogUtil.getLogger().info("4：点击神州信息进行股票浏览");
+        selfSelectionAction.enterIntoStockDetailViewOnSearchStockView("神州信息");
+        LogUtil.getLogger().info("5：返回到自选股页面");
+        selfSelectionAction.back();
+        LogUtil.getLogger().info("6：点击编辑按钮进入自选股编辑页面后切换到最新浏览");
+        selfSelectionAction.enterIntoEditSelectionViewOnSelfSelectionView();
+        selfSelectionAction.editLatestBrowseOnEditSelectionView();
+        LogUtil.getLogger().info("7：点击神州信息旁的删除按钮");
+        selfSelectionAction.deleteSelfSelectionOrStockOnEditSelectionView();
+        LogUtil.getLogger().info("8：返回到自选股页面");
+        selfSelectionAction.back();
+        selfSelectionAction.checkPoint.checkTextNotExist("神州信息");
+    }
+
+    @AfterMethod
+    public void tearDown() {
+        super.tearDown();
+        selfSelectionAction.deleteAllSelfStockAndLatestBrowse();
+    }
+}

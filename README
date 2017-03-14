@@ -6,3 +6,13 @@ sigar
 https://sourceforge.net/projects/sigar/
 window查看进程命令行参数(其中update.exe可以换成你要查看的进程)
 wmic process where caption="update.exe" get caption,commandline /value
+
+Terminal Emulator for Android 1.0.70.apk
+https://www.androiddrawer.com/25716/download-android-terminal-emulator-app-apk/
+
+android应用webview
+https://developers.google.com/web/tools/chrome-devtools/remote-debugging/webviews
+https://developers.google.com/web/tools/chrome-devtools/remote-debugging/
+
+chromedriver地址
+https://sites.google.com/a/chromium.org/chromedriver/downloads

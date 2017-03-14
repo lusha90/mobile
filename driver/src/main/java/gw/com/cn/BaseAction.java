@@ -72,6 +72,7 @@ public class BaseAction {
                 capabilities.setCapability("appActivity", "com.android.dazhihui.dzh.dzh");
                 capabilities.setCapability("newCommandTimeout", device.getSessionTimeout());
                 capabilities.setCapability("updateTip", device.isUpdateTip());
+                capabilities.setCapability("keyboard", device.getKeyboard());
                 break;
             }
         }
@@ -390,6 +391,28 @@ public class BaseAction {
 
     public boolean networkIsAvailable() {
         return this.adb.networkIsAvailable();
+    }
+
+    public boolean textIsExist(String text){
+        this.createSessionAfterTimeout();
+        boolean tag = true;
+        try{
+            this.getDzhAndroidDriver().findElementByName(text);
+        }catch (NoSuchElementException e){
+            tag = false;
+        }
+        return tag;
+    }
+
+    public boolean idIsExist(String id){
+        this.createSessionAfterTimeout();
+        boolean tag = true;
+        try{
+            this.getDzhAndroidDriver().findElementById(id);
+        }catch (NoSuchElementException e){
+            tag = false;
+        }
+        return tag;
     }
 
 }

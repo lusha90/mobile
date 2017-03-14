@@ -40,13 +40,13 @@ public class SelfSelectionAction extends BaseAction {
         Map<String, String> sessionMap = this.getDzhAndroidDriver().getSessionDetails();
     }
 
-    public void backToHome(){
-        while (true){
+    public void backToHome() {
+        while (true) {
             try {
                 AndroidElement androidElement = (AndroidElement) this.getDzhAndroidDriver().findElementById("com.android.dazhihui:id/bottom_menu_button_1");
                 androidElement.click();
                 break;
-            }catch (NoSuchElementException e){
+            } catch (NoSuchElementException e) {
                 this.back();
             }
         }
@@ -79,19 +79,19 @@ public class SelfSelectionAction extends BaseAction {
     public void enterIntoEditSelectionViewOnSelfSelectionView() {
         super.createSessionAfterTimeout();
         this.getDzhAndroidDriver().findElementByName("编辑").click();
-        this.sleep(Constant.SHORT_WAIT_TIME);
+        this.explicitSleepForText("编辑自选股", Constant.LONG_WAIT_TIME);
     }
 
     public void enterIntoSearchStockViewOnSelfSelectionView() {
         super.createSessionAfterTimeout();
         this.getDzhAndroidDriver().findElementById("com.android.dazhihui:id/searchBtn").click();
-        this.sleep(Constant.SHORT_WAIT_TIME);
+        this.explicitSleepForText("搜股票", Constant.LONG_WAIT_TIME);
     }
 
     public void enterIntoSearchStockViewOnEditSelfSelectionView() {
         super.createSessionAfterTimeout();
         this.getDzhAndroidDriver().findElementById("com.android.dazhihui:id/head_right").click();
-        this.sleep(Constant.SHORT_WAIT_TIME);
+        this.explicitSleepForText("搜股票", Constant.LONG_WAIT_TIME);
     }
 
     public void enterIntoOtherView(SelfTitle selfTitle) {
@@ -111,13 +111,13 @@ public class SelfSelectionAction extends BaseAction {
         }
     }
 
-    public void enterIntoStockDetailViewOnSearchStockView(String stockName){
+    public void enterIntoStockDetailViewOnSearchStockView(String stockName) {
         super.createSessionAfterTimeout();
         this.getDzhAndroidDriver().findElementByName(stockName).click();
-        this.sleep(Constant.SHORT_WAIT_TIME);
+        this.explicitSleepForText("分时", Constant.LONG_WAIT_TIME);
     }
 
-    public void enterIntoSelfStockView(){
+    public void enterIntoSelfStockView() {
         super.createSessionAfterTimeout();
         this.getDzhAndroidDriver().findElementById("com.android.dazhihui:id/bottom_menu_button_1").click();
         this.explicitSleepForText("大智慧", Constant.LONG_WAIT_TIME);
@@ -126,20 +126,20 @@ public class SelfSelectionAction extends BaseAction {
     public void editSelfSelectionOnEditSelectionView() {
         super.createSessionAfterTimeout();
         this.getDzhAndroidDriver().findElementByName("编辑自选股").click();
-        this.sleep(Constant.SHORT_WAIT_TIME);
+        this.explicitSleepForText("编辑自选股", Constant.LONG_WAIT_TIME);
     }
 
     public void editLatestBrowseOnEditSelectionView() {
         super.createSessionAfterTimeout();
         this.getDzhAndroidDriver().ignoreUnimportantViews(false);
         this.getDzhAndroidDriver().findElementByName("编辑最新浏览").click();
-        this.sleep(Constant.SHORT_WAIT_TIME);
+        this.explicitSleepForText("编辑最新浏览", Constant.LONG_WAIT_TIME);
     }
 
     public void deleteAllSelfSelectionOrLatestBrowseOnEditSelectionView(boolean isSure) {
         super.createSessionAfterTimeout();
         this.getDzhAndroidDriver().findElementById("com.android.dazhihui:id/head_more").click();
-        this.sleep(Constant.NORMAL_WAIT_TIME);
+        this.explicitSleepForText("确定", Constant.LONG_WAIT_TIME);
         if (isSure) {
             this.getDzhAndroidDriver().findElementById("android:id/button1").click();
         } else {
@@ -149,11 +149,16 @@ public class SelfSelectionAction extends BaseAction {
 
     public void typeTextOnSearchStockView(String typeContent) {
         super.createSessionAfterTimeout();
-        this.getDzhAndroidDriver().findElementById("com.android.dazhihui:id/edit").click();
-        this.sleep(Constant.SHORT_WAIT_TIME);
-        this.getDzhAndroidDriver().findElementById("com.android.dazhihui:id/edit").clear();
-        this.sleep(Constant.SHORT_WAIT_TIME);
-        this.dzhKeyboardTypeContent(typeContent);
+        AndroidElement androidElement = (AndroidElement) this.getDzhAndroidDriver().findElementById("com.android.dazhihui:id/edit");
+        androidElement.click();
+        androidElement.clear();
+        String keyboard = (String) this.getDzhAndroidDriver().getCapabilities().getCapability("keyboard");
+        if(keyboard.equals("origin")){
+            androidElement.sendKeys(typeContent);
+        }
+        else if(keyboard.equals("dzh")){
+            this.dzhKeyboardTypeContent(typeContent);
+        }
         this.sleep(Constant.SHORT_WAIT_TIME);
     }
 
@@ -162,11 +167,10 @@ public class SelfSelectionAction extends BaseAction {
         String text = this.getDzhAndroidDriver().findElementById("com.android.dazhihui:id/dzh_delete_item_name").getText();
         this.getDzhAndroidDriver().findElementByName("删除").click();
         this.getDzhAndroidDriver().findElementByName("确定").click();
-        this.sleep(Constant.SHORT_WAIT_TIME);
         return text;
     }
 
-    public void selfStockOperatorOnSelectionView(String stockName, StockOperator stockOperator){
+    public void selfStockOperatorOnSelectionView(String stockName, StockOperator stockOperator) {
         this.selfStockOperatorOnSelectionView(stockName, stockOperator, true);
     }
 
@@ -187,7 +191,7 @@ public class SelfSelectionAction extends BaseAction {
                     case DEL:
                         this.getDzhAndroidDriver().findElementByName("删除").click();
                         this.getDzhAndroidDriver().findElementById("android:id/button1").click();
-                        if(networkIsAvailable){
+                        if (networkIsAvailable) {
                             try {
                                 this.getDzhAndroidDriver().findElementByName(stockName);
                                 LogUtil.getLogger().info(stockName + " 自选股删除失败");
@@ -195,7 +199,7 @@ public class SelfSelectionAction extends BaseAction {
                             } catch (NoSuchElementException e) {
                                 LogUtil.getLogger().info(stockName + " 自选股删除成功");
                             }
-                        }else{
+                        } else {
                             this.getDzhAndroidDriver().findElementByName(stockName);
                             LogUtil.getLogger().info(stockName + " 断网时自选股删除失败");
                         }
@@ -380,43 +384,62 @@ public class SelfSelectionAction extends BaseAction {
         return list;
     }
 
-    public void enterIntoLatestBrowseMoreView(){
+    public void enterIntoLatestBrowseMoreView() {
         super.createSessionAfterTimeout();
         this.getDzhAndroidDriver().findElementById("com.android.dazhihui:id/self_stock_edit_view_layout").click();
     }
 
-    public void switchSortType(SortType sortType){
+    public void switchSortType(SortType sortType) {
         super.createSessionAfterTimeout();
         String text = this.getDzhAndroidDriver().findElementById("com.android.dazhihui:id/zf_sort_text").getText();
         AndroidElement androidElement = (AndroidElement) this.getDzhAndroidDriver().findElementById("com.android.dazhihui:id/tv_zf");
         switch (sortType) {
             case ZHANGDIEE:
-                if(text.equals("涨幅")){
+                if (text.equals("涨幅")) {
                     androidElement.click();
-                }else if(text.equals("涨跌额")){
-                }else if(text.equals("成交量")){
+                } else if (text.equals("涨跌额")) {
+                } else if (text.equals("成交量")) {
                     androidElement.click();
                     androidElement.click();
                 }
                 return;
             case ZHANGFU:
-                if(text.equals("涨幅")){
-                }else if(text.equals("涨跌额")){
+                if (text.equals("涨幅")) {
+                } else if (text.equals("涨跌额")) {
                     androidElement.click();
                     androidElement.click();
-                }else if(text.equals("成交量")){
+                } else if (text.equals("成交量")) {
                     androidElement.click();
                 }
                 return;
             case CHENGJIAOLIANG:
-                if(text.equals("涨幅")){
+                if (text.equals("涨幅")) {
                     androidElement.click();
                     androidElement.click();
-                }else if(text.equals("涨跌额")){
+                } else if (text.equals("涨跌额")) {
                     androidElement.click();
-                }else if(text.equals("成交量")){
+                } else if (text.equals("成交量")) {
                 }
                 return;
+        }
+    }
+
+    public String getMessageWhenDeleteAllSelfStockOrLatestBrowse() {
+        super.createSessionAfterTimeout();
+        return this.getDzhAndroidDriver().findElementById("android:id/message").getText();
+    }
+
+    public void switchMenuView(boolean isOpen) {
+        super.createSessionAfterTimeout();
+        boolean mark = this.textIsExist("大智慧");
+        if (isOpen) {
+            if (mark) {
+                this.getDzhAndroidDriver().findElementById("com.android.dazhihui:id/messageView").click();
+            }
+        } else {
+            if (!mark) {
+                this.getDzhAndroidDriver().findElementById("com.android.dazhihui:id/messageView").click();
+            }
         }
     }
 
@@ -472,10 +495,10 @@ public class SelfSelectionAction extends BaseAction {
                 text = "0.00";
             }
             Double stockIncrease = 0.0;
-            if(text.contains("万")){
+            if (text.contains("万")) {
                 text = text.replace("万", "");
                 stockIncrease = Double.parseDouble(text) * 10000;
-            }else{
+            } else {
                 stockIncrease = Double.parseDouble(text);
             }
             unSort.add(stockIncrease);
