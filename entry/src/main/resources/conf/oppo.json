@@ -1,0 +1,51 @@
+{
+  "address": "http://127.0.0.1",
+  "ftpPath": "10.15.54.198",
+  "port": "4723",
+  "sdkPath": "D:\\Program\\sdk",
+  "appPath": "C:\\dzh.apk",
+  "downloadAppFromServer": false,
+  "replaceExistingApp": false,
+  "testdataPath": "D:\\Program Files\\Tesseract-OCR\\tessdata",
+  "menuConf": "http://mnews.gw.com.cn/wap/data/mobileconfig/sc850.json",
+  "devices": [
+    {
+      "deviceBrand": "oppo",
+      "brandSeries": "r9",
+      "deviceType": "master",
+      "deviceName": "OR6HBQOF99999999",
+      "platformName": "Android",
+      "platformVersion": "25",
+      "automationName": "Appium",
+      "sessionTimeout": "120",
+      "language": "zh_CN",
+      "locale": "CN",
+      "updateTip": false,
+      "keyboard" : "origin"
+    },
+    {
+      "deviceBrand": "google",
+      "brandSeries": "nexus6p",
+      "deviceType": "slave",
+      "deviceName": "ENU7N16709000499",
+      "platformName": "Android",
+      "platformVersion": "25",
+      "automationName": "Appium",
+      "sessionTimeout": "120",
+      "language": "zh_CN",
+      "locale": "CN",
+      "updateTip": false,
+      "keyboard" : "origin"
+    }
+  ],
+  "account": [
+    {
+      "accountID": "110569450",
+      "accountPwd": "lu123456"
+    },
+    {
+      "accountID": "110569451",
+      "accountPwd": "lu123456"
+    }
+  ]
+}
