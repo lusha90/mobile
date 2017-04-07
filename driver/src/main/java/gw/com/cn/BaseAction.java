@@ -44,6 +44,8 @@ public class BaseAction {
 
     public int height;
 
+    public List<Account> accounts;
+
     public void initDZHInfo(DZHInfo dzhInfo_) {
         if (dzhInfo == null && dzhInfo_ != null) {
             dzhInfo = dzhInfo_;
@@ -57,6 +59,7 @@ public class BaseAction {
             capabilities.setCapability("app", dzhInfo.getAppPath());
         }
         List<DeviceInfo> devices = dzhInfo.getDevicesInfo();
+        accounts = dzhInfo.getAccounts();
         for (DeviceInfo device : devices) {
             if (device.getDeviceType().equals(deviceType)) {
                 adb = new Adb(dzhInfo.getSdkPath() + File.separator + "platform-tools" + File.separator, device.getDeviceName());

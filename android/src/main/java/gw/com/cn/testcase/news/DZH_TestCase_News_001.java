@@ -1,7 +1,7 @@
 package gw.com.cn.testcase.news;
 
+import gw.com.cn.NewsAction;
 import gw.com.cn.testcase.DZHBaseTestCase;
-import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -11,15 +11,19 @@ import org.testng.annotations.Test;
  */
 public class DZH_TestCase_News_001 extends DZHBaseTestCase {
 
+    private NewsAction newsAction;
+
     @BeforeMethod
     public void setUp() {
         super.setUp();
-        Assert.assertEquals(1,2);
+        newsAction = new NewsAction("master");
     }
 
-   @Test(description = "设置界面打开同步自选股")
+   @Test(description = "浏览大数量的新闻")
     public void testStep() {
-        super.testStep();
+       super.testStep();
+       newsAction.enterIntoNewsView();
+       newsAction.browseFastNews(100);
     }
 
     @AfterMethod

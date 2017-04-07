@@ -1,15 +1,20 @@
 package gw.com.cn;
 
+import gw.com.cn.tesseract.OcrUtil;
 import gw.com.cn.util.LogUtil;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.TouchAction;
 import io.appium.java_client.android.AndroidElement;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.OutputType;
 import org.openqa.selenium.Point;
 import org.testng.Assert;
 
+import java.awt.*;
+import java.io.File;
 import java.util.*;
+import java.util.List;
 
 /**
  * Created by lusha on 2016/11/28.
@@ -90,7 +95,9 @@ public class SelfSelectionAction extends BaseAction {
 
     public void enterIntoSearchStockViewOnEditSelfSelectionView() {
         super.createSessionAfterTimeout();
-        this.getDzhAndroidDriver().findElementById("com.android.dazhihui:id/head_right").click();
+        this.getDzhAndroidDriver().findElementByName("添加股票").click();
+        //this.getDzhAndroidDriver().findElementByName("添加股票").click();
+        //this.getDzhAndroidDriver().findElementById("com.android.dazhihui:id/head_right").click();
         this.explicitSleepForText("搜股票", Constant.LONG_WAIT_TIME);
     }
 
@@ -138,12 +145,15 @@ public class SelfSelectionAction extends BaseAction {
 
     public void deleteAllSelfSelectionOrLatestBrowseOnEditSelectionView(boolean isSure) {
         super.createSessionAfterTimeout();
-        this.getDzhAndroidDriver().findElementById("com.android.dazhihui:id/head_more").click();
-        this.explicitSleepForText("确定", Constant.LONG_WAIT_TIME);
-        if (isSure) {
-            this.getDzhAndroidDriver().findElementById("android:id/button1").click();
-        } else {
-            this.getDzhAndroidDriver().findElementById("android:id/button2").click();
+        if(this.idIsExist("com.android.dazhihui:id/move_item")){
+            this.getDzhAndroidDriver().findElementById("com.android.dazhihui:id/select_all_tv").click();
+            this.getDzhAndroidDriver().findElementById("com.android.dazhihui:id/delete").click();
+            this.explicitSleepForText("确定", Constant.LONG_WAIT_TIME);
+            if (isSure) {
+                this.getDzhAndroidDriver().findElementById("android:id/button1").click();
+            } else {
+                this.getDzhAndroidDriver().findElementById("android:id/button2").click();
+            }
         }
     }
 
@@ -164,7 +174,9 @@ public class SelfSelectionAction extends BaseAction {
 
     public String deleteSelfSelectionOrStockOnEditSelectionView() {
         super.createSessionAfterTimeout();
-        String text = this.getDzhAndroidDriver().findElementById("com.android.dazhihui:id/dzh_delete_item_name").getText();
+        AndroidElement androidElement = (AndroidElement) this.getDzhAndroidDriver().findElementById("com.android.dazhihui:id/dzh_delete_item_name");
+        String text = androidElement.getText();
+        androidElement.click();
         this.getDzhAndroidDriver().findElementByName("删除").click();
         this.getDzhAndroidDriver().findElementByName("确定").click();
         return text;
@@ -240,10 +252,26 @@ public class SelfSelectionAction extends BaseAction {
         return selfStocks;
     }
 
+    public String addSelfStockOnOnStockDetailView() {
+        super.createSessionAfterTimeout();
+        File snapshotFile = this.getDzhAndroidDriver().getScreenshotAs(OutputType.FILE);
+        AndroidElement stockName = (AndroidElement) this.getDzhAndroidDriver().findElementById("com.android.dazhihui:id/stockchart_info");
+        Point stockPoint = stockName.getLocation();
+        Dimension stockDimension = stockName.getSize();
+        Rectangle rectangle = new Rectangle(stockPoint.getX(), stockPoint.getY(), stockDimension.getWidth(), stockDimension.getHeight());
+        List<String> recognizedContent = OcrUtil.recognizedTextSplitResult((String)
+                this.getDzhAndroidDriver().getCapabilities().getCapability("testdataPath"), snapshotFile.getAbsolutePath(), rectangle);
+        this.getDzhAndroidDriver().findElementByName("加自选").click();
+        return recognizedContent.get(0);
+    }
+
     public void newestSortOnSelfSelectionView(boolean isDesc) {
         super.createSessionAfterTimeout();
-        if (this.getDzhAndroidDriver().isContainImage("selfSelection/sortedDesc.png") || this.getDzhAndroidDriver().isContainImage("selfSelection/sortedAsc.png")) {
-            this.cancelSortOnSelfSelectionView();
+        //if (this.getDzhAndroidDriver().isContainImage("selfSelection/sortedDesc.png") || this.getDzhAndroidDriver().isContainImage("selfSelection/sortedAsc.png")) {
+        //   this.cancelSortOnSelfSelectionView();
+        //}
+        if(this.textIsExist("取消排序")) {
+            this.getDzhAndroidDriver().findElementByName("取消排序").click();
         }
         if (isDesc) {
             this.getDzhAndroidDriver().findElementById("com.android.dazhihui:id/zx_sort").click();
@@ -255,24 +283,30 @@ public class SelfSelectionAction extends BaseAction {
     }
 
     public void switchSkin(boolean isDark) {
+        super.createSessionAfterTimeout();
+        this.getDzhAndroidDriver().findElementById("com.android.dazhihui:id/moreBtn").click();
+        this.explicitSleepForText("换肤", Constant.SHORT_WAIT_TIME);
         boolean currentSkin = this.getDzhAndroidDriver().isContainImage("selfSelection/skinLight.png");
         if (currentSkin) {
             if (isDark) {
-                this.getDzhAndroidDriver().findElementById("com.android.dazhihui:id/skinchange").click();
+                this.getDzhAndroidDriver().findElementById("com.android.dazhihui:id/ll_change_skin").click();
             } else {
             }
         } else {
             if (isDark) {
             } else {
-                this.getDzhAndroidDriver().findElementById("com.android.dazhihui:id/skinchange").click();
+                this.getDzhAndroidDriver().findElementById("com.android.dazhihui:id/ll_change_skin").click();
             }
         }
     }
 
     public void increaseSortOnSelfSelectionView(boolean isDesc) {
         super.createSessionAfterTimeout();
-        if (this.getDzhAndroidDriver().isContainImage("selfSelection/sortedDesc.png") || this.getDzhAndroidDriver().isContainImage("selfSelection/sortedAsc.png")) {
-            this.cancelSortOnSelfSelectionView();
+        //if (this.getDzhAndroidDriver().isContainImage("selfSelection/sortedDesc.png") || this.getDzhAndroidDriver().isContainImage("selfSelection/sortedAsc.png")) {
+        //    this.cancelSortOnSelfSelectionView();
+        //}
+        if(this.textIsExist("取消排序")) {
+            this.getDzhAndroidDriver().findElementByName("取消排序").click();
         }
         if (isDesc) {
             this.getDzhAndroidDriver().findElementById("com.android.dazhihui:id/zf_sort").click();
@@ -366,7 +400,7 @@ public class SelfSelectionAction extends BaseAction {
             this.sleep(Constant.NORMAL_WAIT_TIME);
             LogUtil.getLogger().info("第" + ++i + "次向下滑动一页查找股票");
             try {
-                String key = allStocks.get(allStocks.size() - 10);
+                String key = allStocks.get(allStocks.size() - 8);
                 LogUtil.getLogger().info("search key : " + key);
                 this.getDzhAndroidDriver().findElementByName(key);
                 LogUtil.getLogger().info("最新浏览列表已到底端");
