@@ -1,4 +1,4 @@
-package gw.com.cn;
+package gw.com.cn.ios;
 
 import io.selendroid.standalone.SelendroidConfiguration;
 import io.selendroid.standalone.SelendroidLauncher;

@@ -1,4 +1,4 @@
-package gw.com.cn;
+package gw.com.cn.ios;
 
 import io.selendroid.client.SelendroidDriver;
 import io.selendroid.common.SelendroidCapabilities;
