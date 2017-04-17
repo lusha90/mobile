@@ -18,8 +18,11 @@ chromedriver地址
 https://sites.google.com/a/chromium.org/chromedriver/downloads
 
 appium setup for mac
-1: brew install libimobiledevice --HEAD
-2: brew install carthage
-3: brew install node
-4: npm install -g ios-deploy
-5: npm install -g appium@1.6.4
+1：install brew by command ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+2: brew install libimobiledevice --HEAD
+3: brew install carthage
+4: brew install node
+5: npm install -g ios-deploy
+6: npm install -g appium@1.6.4
+7: run ./Scripts/bootstrap.sh after downloaded WebDriverAgent,copy WebDriverAgent to /usr/local/lib/node_modules/appium/node_modules/appium-xcuitest-driver/WebDriverAgent
+8: run "appium -p 4723" start appium server
