@@ -12,7 +12,7 @@ import java.net.URL;
 /**
  * Created by lusha on 2016/11/28.
  */
-public class DZHIOSDriver extends IOSDriver {
+public class DZHIosDriver extends IOSDriver {
     /**
      * @param executor     is an instance of {@link HttpCommandExecutor}
      *                     or class that extends it. Default commands or another vendor-specific
@@ -20,7 +20,7 @@ public class DZHIOSDriver extends IOSDriver {
      * @param capabilities take a look
      *                     at {@link Capabilities}
      */
-    public DZHIOSDriver(HttpCommandExecutor executor, Capabilities capabilities) {
+    public DZHIosDriver(HttpCommandExecutor executor, Capabilities capabilities) {
         super(executor, capabilities);
     }
 
@@ -30,7 +30,7 @@ public class DZHIOSDriver extends IOSDriver {
      * @param desiredCapabilities take a look
      *                            at {@link Capabilities}
      */
-    public DZHIOSDriver(URL remoteAddress, Capabilities desiredCapabilities) {
+    public DZHIosDriver(URL remoteAddress, Capabilities desiredCapabilities) {
         super(remoteAddress, desiredCapabilities);
     }
 
@@ -42,7 +42,7 @@ public class DZHIOSDriver extends IOSDriver {
      * @param desiredCapabilities take a look
      *                            at {@link Capabilities}
      */
-    public DZHIOSDriver(URL remoteAddress, HttpClient.Factory httpClientFactory, Capabilities desiredCapabilities) {
+    public DZHIosDriver(URL remoteAddress, HttpClient.Factory httpClientFactory, Capabilities desiredCapabilities) {
         super(remoteAddress, httpClientFactory, desiredCapabilities);
     }
 
@@ -52,7 +52,7 @@ public class DZHIOSDriver extends IOSDriver {
      * @param desiredCapabilities take a look
      *                            at {@link Capabilities}
      */
-    public DZHIOSDriver(AppiumDriverLocalService service, Capabilities desiredCapabilities) {
+    public DZHIosDriver(AppiumDriverLocalService service, Capabilities desiredCapabilities) {
         super(service, desiredCapabilities);
     }
 
@@ -64,7 +64,7 @@ public class DZHIOSDriver extends IOSDriver {
      * @param desiredCapabilities take a look
      *                            at {@link Capabilities}
      */
-    public DZHIOSDriver(AppiumDriverLocalService service, HttpClient.Factory httpClientFactory, Capabilities desiredCapabilities) {
+    public DZHIosDriver(AppiumDriverLocalService service, HttpClient.Factory httpClientFactory, Capabilities desiredCapabilities) {
         super(service, httpClientFactory, desiredCapabilities);
     }
 
@@ -74,7 +74,7 @@ public class DZHIOSDriver extends IOSDriver {
      * @param desiredCapabilities take a look
      *                            at {@link Capabilities}
      */
-    public DZHIOSDriver(AppiumServiceBuilder builder, Capabilities desiredCapabilities) {
+    public DZHIosDriver(AppiumServiceBuilder builder, Capabilities desiredCapabilities) {
         super(builder, desiredCapabilities);
     }
 
@@ -86,7 +86,7 @@ public class DZHIOSDriver extends IOSDriver {
      * @param desiredCapabilities take a look
      *                            at {@link Capabilities}
      */
-    public DZHIOSDriver(AppiumServiceBuilder builder, HttpClient.Factory httpClientFactory, Capabilities desiredCapabilities) {
+    public DZHIosDriver(AppiumServiceBuilder builder, HttpClient.Factory httpClientFactory, Capabilities desiredCapabilities) {
         super(builder, httpClientFactory, desiredCapabilities);
     }
 
@@ -96,7 +96,7 @@ public class DZHIOSDriver extends IOSDriver {
      * @param desiredCapabilities take a look
      *                            at {@link Capabilities}
      */
-    public DZHIOSDriver(HttpClient.Factory httpClientFactory, Capabilities desiredCapabilities) {
+    public DZHIosDriver(HttpClient.Factory httpClientFactory, Capabilities desiredCapabilities) {
         super(httpClientFactory, desiredCapabilities);
     }
 
@@ -104,7 +104,11 @@ public class DZHIOSDriver extends IOSDriver {
      * @param desiredCapabilities take a look
      *                            at {@link Capabilities}
      */
-    public DZHIOSDriver(Capabilities desiredCapabilities) {
+    public DZHIosDriver(Capabilities desiredCapabilities) {
         super(desiredCapabilities);
+    }
+
+    public boolean isContainImage(String s) {
+        return false;
     }
 }

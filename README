@@ -16,3 +16,10 @@ https://developers.google.com/web/tools/chrome-devtools/remote-debugging/
 
 chromedriver地址
 https://sites.google.com/a/chromium.org/chromedriver/downloads
+
+appium setup for mac
+1: brew install libimobiledevice --HEAD
+2: brew install carthage
+3: brew install node
+4: npm install -g ios-deploy
+5: npm install -g appium@1.6.4
