@@ -1,0 +1,198 @@
+class Constants {
+    static final String MASTER_BRANCH = 'master'
+    static final String QA_BUILD = 'Debug'
+    static final String RELEASE_BUILD = 'Release'
+    static final String INTERNAL_TRACK = 'internal'
+    static final String RELEASE_TRACK = 'release'
+}
+
+def getBuildType() {
+    switch (env.BRANCH_NAME) {
+        case Constants.MASTER_BRANCH:
+            return Constants.RELEASE_BUILD
+        default:
+            return Constants.QA_BUILD
+    }
+}
+
+def getTrackType() {
+    switch (env.BRANCH_NAME) {
+        case Constants.MASTER_BRANCH:
+            return Constants.RELEASE_TRACK
+        default:
+            return Constants.INTERNAL_TRACK
+    }
+}
+
+def isDeployCandidate() {
+    return ("${env.BRANCH_NAME}" =~ /(develop|master)/)
+}
+
+pipeline {
+    //agent { dockerfile true }
+	agent { label 'android' }
+	options {
+       //timestamps()
+       disableConcurrentBuilds()
+	   timeout(time: 30, unit: 'MINUTES')
+
+    }
+	parameters {
+        string(name: 'branch', defaultValue: 'dev_1.5', description: 'package branch')
+        booleanParam(name: 'isDebug', defaultValue: false, description: 'debug or realse')
+		booleanParam(name: 'isLocal', defaultValue: false, description: 'local or formal')
+    }
+    //environment {
+    //    appName = 'gold-key'
+    //    KEY_PASSWORD = credentials('keyPassword')
+    //    KEY_ALIAS = credentials('keyAlias')
+    //    KEYSTORE = credentials('keystore')
+    //    STORE_PASSWORD = credentials('storePassword')
+    //}
+	triggers { pollSCM('H */4 * * 1-5') }
+
+    stages {
+	    stage("Checkout Code") {
+        	steps {
+        		echo "$branch"
+        		script {
+        		     sh "rm -rf jys_android"
+        		     sh "git clone git@gitlab.sh.zgzt:limin/jys_android.git"
+        		     sh "sudo chmod -R u+x jys_android"
+        		     sh "cd jys_android;git config --add core.filemode false"
+        		     sh "cd jys_android;git checkout ${branch}"
+        		     sh "touch jys_android/local.properties"
+        		     sh "echo \"sdk.dir=/opt/pro/sdk-root\"> jys_android/local.properties"
+        		     sh "cat jys_android/gradle.properties|sed '/jvmargs/d'>jys_android/bak"
+        		     sh "mv jys_android/bak jys_android/gradle.properties"
+        		     sh "echo \"org.gradle.jvmargs=-Xmx4096m -XX:MaxPermSize=1024m -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8\">>jys_android/gradle.properties"
+        		}
+             }
+        }
+	    stage("Commit Log") {
+        	steps {
+        		echo "$branch"
+        		script {
+        		     if ("$branch" == "master") {
+        		        num=100
+        		        //find tag line
+        		        firstCommit = sh  returnStdout: true, script: 'cd jys_android;cat /opt/pro/firstCommit;xargs echo -n;'
+        		        firstCommit = firstCommit.trim()
+        		        sh "cd jys_android;git log --no-merges --pretty=oneline -${num}|nl|sed -n '/${firstCommit}/p'|cut -c1-7|sed 's/ //g'>tagLine"
+        		        lines = sh  returnStdout: true, script: 'cd jys_android;cat tagLine;xargs echo -n;'
+        		        //lines = sh  returnStdout: true, script: 'cd jys_android;git log --no-merges --pretty=oneline -30|nl|sed -n \'/${firstCommit}/p\'|cut -c1-7|sed \'s/ //g\';xargs echo -n;'
+        		        lines = lines.trim()
+        		        //line range
+        		        echo "cd jys_android;git log --no-merges --pretty=oneline -${num}|nl|sed '${lines},${num}d'>commitLog"
+                        sh "cd jys_android;git log --no-merges --pretty=oneline -${num}|nl|sed '${lines},${num}d'>commitLog"
+                        sh "cd jys_android;git log --no-merges --pretty=%H -1>/opt/pro/firstCommit"
+                   }else{
+
+                   }
+        		}
+             }
+        }
+       stage('Modify Conf') {
+           steps {
+               echo 'Modify Conf'
+               script {
+                   echo 'pass'
+               }
+           }
+       }
+
+       stage('Build Apk') {
+            //when { expression { return isDeployCandidate() } }
+            steps {
+                echo 'Building'
+                script {
+                    //VARIANT = getBuildType()
+                    //sh "./gradlew -PstorePass=${STORE_PASSWORD} -Pkeystore=${KEYSTORE} -Palias=${KEY_ALIAS} -PkeyPass=${KEY_PASSWORD} bundle${VARIANT}"
+                    if ("$isDebug" == "true") {
+                        sh "cd jys_android; ./gradlew -b build.gradle assembleDebug"
+                        //sh "jys_android/gradlew -b jys_android/build.gradle assembleDebug"
+                    } else {
+                        sh "cd jys_android; ./gradlew -b build.gradle assembleRelease"
+                        //sh "jys_android/gradlew -b jys_android/build.gradle assembleRelease"
+                    }
+                }
+            }
+        }
+       stage('Deploy Apk') {
+          steps {
+            echo 'Deploying'
+            echo "$branch " + "$isDebug " + "$isLocal"
+            script {
+                if ("$isDebug" == "true") {
+                    output="jys_android/app/build/outputs/apk/zgjys/debug/"
+                    outputName="app-zgjys*.apk"
+                } else {
+                    output="jys_android/app/build/outputs/apk/zgjys/release/"
+                    outputName="zgjys-release*.apk"
+                }
+                storePackage="/opt/pro/package/release/"
+                now = sh  returnStdout: true, script: 'date "+%Y_%m_%d_%H_%M_%S" > out.txt; cat out.txt;xargs echo -n;'
+                mpath="mkdir ${storePackage}${now}"
+                cpf="cp ${output}${outputName} ${storePackage}${now}"
+                sh "mkdir ${storePackage}${now}"
+                sh "cp ${output}${outputName} ${storePackage}${now}"
+                if ("$branch" == "master") {
+                    sh "cp jys_android/commitLog ${storePackage}${now}"
+                }
+                env.curApk="${storePackage}${now}"
+                now = now.trim()
+                env.opt="${storePackage}${now}"
+                echo "$output " + "$outputName " + "$mpath " + "$cpf" + "${opt}"
+            }
+          }
+       }
+       stage('Jiagu Apk') {
+          steps {
+            script {
+                if ("$isDebug" == "true") {
+                    output="jys_android/app/build/outputs/apk/debug/"
+                    outputName="app-debug.apk"
+                } else {
+                    output="jys_android/app/build/outputs/apk/zgjys/release/"
+                    outputName="zgjys-release*.apk"
+                }
+                sh "java -jar /opt/pro/360jiagu/jiagu/jiagu.jar -jiagu ${output}${outputName} ${opt} -autosign"
+            }
+          }
+       }
+       stage('Upload Payer') {
+          steps {
+            script {
+                if ("$isDebug" == "true") {
+                    output="jys_android/app/build/outputs/apk/debug/"
+                    outputName="app-debug.apk"
+                } else {
+                    output="jys_android/app/build/outputs/apk/release/"
+                    outputName="app-release*.apk"
+                    sh "cp ${opt}/zgjys-release*jiagu* ${opt}/app-release-jiagu.apk"
+                    sh "curl -F 'file=@${opt}/app-release-jiagu.apk' -F 'uKey=26bbd09da8284f4f8302c3fd035d7e5f' -F '_api_key=35945c518ebf67febb0057b44abfdc57' https://upload.pgyer.com/apiv2/app/upload"
+                }
+            }
+          }
+       }
+       stage('Upload FTP') {
+          steps {
+			   sh '''
+               sshpass -p zgzt123 sftp -oBatchMode=no -b - jenkins@192.168.106.26 << !
+                   cd /upload/android
+                   put -r ${curApk}
+                   bye
+                !
+				'''
+          }
+       }
+       stage('Clean Env') {
+           steps {
+               echo 'Cleaning'
+               script {
+                   sh "cd jys_android; ./gradlew -b build.gradle -stop"
+               }
+           }
+       }
+    }
+}
